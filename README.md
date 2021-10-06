@@ -8,6 +8,7 @@
 2021年10月6日，原作者已经删库
 
 ## 依赖库及编译方法
+#### 依赖库
 * taglib
 
 ### Linux / macOS
@@ -25,14 +26,21 @@ brew install taglib
 make macos
 ```
 
+注意：Linux / macOS 为动态库支持，Linux 下静态编译需要手动编译 taglib 静态库，macOS 原生库不支持静态链接
+
 ### Windows
+
 因为部分代码（例如常量引用等）在 msvc 下面编译不通过，本项目需要使用 MinGW 编译
 
 下载 [mingw-w64](https://winlibs.com/) 的 Windows 版本，这里推荐从 winlibs 这个网站下载，编译器版本始终保持最新
 
 将 mingw64/bin 添加到系统环境变量
 
-taglib 在 Windows 下已经编译好放在项目内，直接执行 `mingw32-make win32` 即可
+taglib 在 Windows 下已经编译好放在项目内，直接执行
+
+```shell
+mingw32-make win32
+```
 
 ## 使用
 1. 命令行下使用 `ncmdump [files]...`
