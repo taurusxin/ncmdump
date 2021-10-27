@@ -51,7 +51,7 @@ mingw32-make win32
 ```shell
 pacman -Syu
 git clone https://github.com/taurusxin/ncmdump && cd ncmdump
-make 
+make win32
 ```
 
 ## 使用
