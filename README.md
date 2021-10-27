@@ -30,6 +30,8 @@ make macos
 
 ### Windows
 
+#### MinGW
+
 因为部分代码（例如常量引用等）在 msvc 下面编译不通过，本项目需要使用 MinGW 编译
 
 下载 [mingw-w64](https://winlibs.com/) 的 Windows 版本，这里推荐从 winlibs 这个网站下载，编译器版本始终保持最新
@@ -43,6 +45,14 @@ mingw32-make win32
 ```
 
 生成的二进制程序为静态链接版本，可脱离运行库运行在裸机上
+
+#### msys2
+
+```shell
+pacman -Syu
+git clone https://github.com/taurusxin/ncmdump && cd ncmdump
+make
+```
 
 ## 使用
 1. 命令行下使用 `ncmdump [files]...`
