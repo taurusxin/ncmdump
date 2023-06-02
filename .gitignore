@@ -1,2 +1,5 @@
-ncmdump*.exe
+*.exe
 ncmdump
+
+.vscode
+.idea
