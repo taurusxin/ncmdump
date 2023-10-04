@@ -1,5 +1,6 @@
 #ifndef _MACARON_BASE64_H_
 #define _MACARON_BASE64_H_
+#include <cstdint>
 
 #include <string>
 
