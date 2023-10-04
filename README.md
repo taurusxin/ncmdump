@@ -9,7 +9,7 @@
 源码复刻自 anonymous5l/ncmdump，感谢前辈的付出！
 做了 Windows 下的移植，修复了一些编译问题
 
-## 便捷式传送门
+## 传送门
 
 2021年10月6日，原作者已经删库
 
@@ -30,9 +30,13 @@ make linux
 apt install libtag1-dev
 make linux
 
-# macOS
+# macOS with Intel chip
 brew install taglib
-make macos
+make macos-intel
+
+# macOS with Apple Silicon (M1 / M2)
+brew install taglib
+make macos-arm64
 ```
 
 注意：Linux / macOS 为动态库支持，Linux 下静态编译需要手动编译 taglib 静态库，macOS 原生库不支持静态链接
