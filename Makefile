@@ -5,7 +5,13 @@ linux:
 	g++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag
 	strip ncmdump
 
-macos:
+macos-intel:
+	clang++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag
+	strip ncmdump
+
+macos-arm64:export CPATH=/opt/homebrew/include
+macos-arm64:export LIBRARY_PATH=/opt/homebrew/lib
+macos-arm64:
 	clang++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag
 	strip ncmdump
 
