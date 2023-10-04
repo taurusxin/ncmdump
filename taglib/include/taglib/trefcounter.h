@@ -107,7 +107,7 @@ namespace TagLib
 #endif
   };
 
-}
+}  // namespace TagLib
 
 #endif // DO_NOT_DOCUMENT
 #endif

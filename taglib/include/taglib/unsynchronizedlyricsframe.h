@@ -174,6 +174,6 @@ namespace TagLib {
       UnsynchronizedLyricsFramePrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 #endif

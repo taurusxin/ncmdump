@@ -226,7 +226,7 @@ namespace TagLib {
       PageHeaderPrivate *d;
     };
 
-  }
-}
+  }  // namespace Ogg
+}  // namespace TagLib
 
 #endif

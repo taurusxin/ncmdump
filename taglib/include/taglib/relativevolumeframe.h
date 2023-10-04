@@ -269,6 +269,6 @@ namespace TagLib {
       RelativeVolumeFramePrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 #endif

@@ -34,9 +34,7 @@
 #include "tlist.h"
 
 namespace TagLib {
-
   namespace MP4 {
-
     class Atom;
     typedef TagLib::List<Atom *> AtomList;
 
@@ -74,7 +72,7 @@ namespace TagLib {
 
     typedef TagLib::List<AtomData> AtomDataList;
 
-    class Atom
+    class TAGLIB_EXPORT Atom
     {
     public:
       Atom(File *file);
@@ -88,11 +86,11 @@ namespace TagLib {
       AtomList children;
     private:
       static const int numContainers = 11;
-      static const char *containers[11];
+      static const char *const containers[11];
     };
 
     //! Root-level atoms
-    class Atoms
+    class TAGLIB_EXPORT Atoms
     {
     public:
       Atoms(File *file);
@@ -101,10 +99,8 @@ namespace TagLib {
       AtomList path(const char *name1, const char *name2 = 0, const char *name3 = 0, const char *name4 = 0);
       AtomList atoms;
     };
-
-  }
-
-}
+  }  // namespace MP4
+}  // namespace TagLib
 
 #endif
 

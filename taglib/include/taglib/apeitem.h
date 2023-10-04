@@ -31,9 +31,7 @@
 #include "tstringlist.h"
 
 namespace TagLib {
-
   namespace APE {
-
     //! An implementation of APE-items
 
     /*!
@@ -215,10 +213,7 @@ namespace TagLib {
       class ItemPrivate;
       ItemPrivate *d;
     };
-  }
-
-}
+  }  // namespace APE
+}  // namespace TagLib
 
 #endif
-
-

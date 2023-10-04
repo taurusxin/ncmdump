@@ -160,7 +160,7 @@ namespace TagLib {
         virtual bool save();
 
         /*!
-         * \deprecated
+         * \deprecated Use save(TagTypes, StripTags, ID3v2::Version).
          */
         TAGLIB_DEPRECATED bool save(TagTypes tags, bool stripOthers, int id3v2Version = 4);
 
@@ -208,8 +208,8 @@ namespace TagLib {
         class FilePrivate;
         FilePrivate *d;
       };
-    }
-  }
-}
+    }  // namespace WAV
+  }  // namespace RIFF
+}  // namespace TagLib
 
 #endif

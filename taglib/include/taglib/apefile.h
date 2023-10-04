@@ -229,7 +229,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
-}
+  }  // namespace APE
+}  // namespace TagLib
 
 #endif

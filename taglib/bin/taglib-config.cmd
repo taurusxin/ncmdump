@@ -27,10 +27,10 @@ goto theend
   *       to allow for static, shared or debug builds.
   * It would be preferable if the top level CMakeLists.txt provided the library name during config. ??
 :doit
-if /i "%1#" == "--libs#"    echo -LC:/taglib/lib -llibtag
-if /i "%1#" == "--cflags#"  echo -IC:/taglib/include -IC:/taglib/include/taglib
-if /i "%1#" == "--version#" echo 1.12
-if /i "%1#" == "--prefix#"  echo C:/taglib
+if /i "%1#" == "--libs#"    echo -LC:/Users/TaurusXin/Downloads/ncmdump/taglib/lib -llibtag
+if /i "%1#" == "--cflags#"  echo -IC:/Users/TaurusXin/Downloads/ncmdump/taglib/include -IC:/Users/TaurusXin/Downloads/ncmdump/taglib/include/taglib
+if /i "%1#" == "--version#" echo 1.13.1
+if /i "%1#" == "--prefix#"  echo C:/Users/TaurusXin/Downloads/ncmdump/taglib
 
 :theend
 

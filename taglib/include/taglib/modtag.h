@@ -29,9 +29,7 @@
 #include "tag.h"
 
 namespace TagLib {
-
   namespace Mod {
-
     /*!
      * Tags for module files (Mod, S3M, IT, XM).
      *
@@ -186,9 +184,6 @@ namespace TagLib {
       class TagPrivate;
       TagPrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace Mod
+}  // namespace TagLib
 #endif

@@ -238,7 +238,7 @@ namespace TagLib {
        * when
        *
        * \see ID3v2FrameFactory
-       * \deprecated This value should be passed in via the constructor
+       * \deprecated This value should be passed in via the constructor.
        */
       TAGLIB_DEPRECATED void setID3v2FrameFactory(const ID3v2::FrameFactory *factory);
 
@@ -337,7 +337,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
-}
+  }  // namespace FLAC
+}  // namespace TagLib
 
 #endif

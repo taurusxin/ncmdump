@@ -18,7 +18,7 @@ namespace TagLib {
       v3 = 3, //<! ID3v2.3
       v4 = 4  //<! ID3v2.4
     };
-  }
-}
+  } // namespace ID3v2
+}  // namespace TagLib
 
 #endif

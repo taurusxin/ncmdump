@@ -138,7 +138,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
+  }  // namespace Vorbis
 
 /*
  * To keep compatibility with the current version put Vorbis in the Ogg namespace
@@ -152,6 +152,6 @@ namespace TagLib {
   namespace Ogg { namespace Vorbis { typedef TagLib::Vorbis::File File; } }
 #endif
 
-}
+}  // namespace TagLib
 
 #endif

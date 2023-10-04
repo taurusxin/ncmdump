@@ -101,7 +101,7 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-  }
-}
+  }  // namespace IT
+}  // namespace TagLib
 
 #endif

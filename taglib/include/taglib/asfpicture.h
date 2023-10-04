@@ -216,7 +216,7 @@ namespace TagLib
         class PicturePrivate;
         PicturePrivate *d;
       };
-  }
-}
+  }  // namespace ASF
+}  // namespace TagLib
 
 #endif // ASFPICTURE_H

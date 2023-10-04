@@ -69,6 +69,6 @@ namespace TagLib
    * \see DebugListener
    */
   TAGLIB_EXPORT void setDebugListener(DebugListener *listener);
-}
+}  // namespace TagLib
 
 #endif

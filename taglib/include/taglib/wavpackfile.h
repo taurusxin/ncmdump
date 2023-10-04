@@ -217,7 +217,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
-}
+  }  // namespace WavPack
+}  // namespace TagLib
 
 #endif

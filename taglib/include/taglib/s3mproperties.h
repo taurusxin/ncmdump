@@ -88,7 +88,7 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-  }
-}
+  }  // namespace S3M
+}  // namespace TagLib
 
 #endif

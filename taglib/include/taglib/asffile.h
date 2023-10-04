@@ -33,10 +33,8 @@
 #include "asftag.h"
 
 namespace TagLib {
-
   //! An implementation of ASF (WMA) metadata
   namespace ASF {
-
     /*!
      * This implements and provides an interface for ASF files to the
      * TagLib::Tag and TagLib::AudioProperties interfaces by way of implementing
@@ -130,9 +128,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-
-  }
-
-}
+  }  // namespace ASF
+}  // namespace TagLib
 
 #endif

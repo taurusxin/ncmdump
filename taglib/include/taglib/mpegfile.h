@@ -193,19 +193,19 @@ namespace TagLib {
       bool save(int tags);
 
       /*!
-       * \deprecated
+       * \deprecated Use save(int, StripTags, ID3v2::Version, DuplicateTags).
        */
       // BIC: combine with the above method
       TAGLIB_DEPRECATED bool save(int tags, bool stripOthers);
 
       /*!
-       * \deprecated
+       * \deprecated Use save(int, StripTags, ID3v2::Version, DuplicateTags).
        */
       // BIC: combine with the above method
       TAGLIB_DEPRECATED bool save(int tags, bool stripOthers, int id3v2Version);
 
       /*!
-       * \deprecated
+       * \deprecated Use save(int, StripTags, ID3v2::Version, DuplicateTags).
        */
       // BIC: combine with the above method
       TAGLIB_DEPRECATED bool save(int tags, bool stripOthers, int id3v2Version, bool duplicateTags);
@@ -315,7 +315,7 @@ namespace TagLib {
        * Set the ID3v2::FrameFactory to something other than the default.
        *
        * \see ID3v2FrameFactory
-       * \deprecated This value should be passed in via the constructor
+       * \deprecated This value should be passed in via the constructor.
        */
       TAGLIB_DEPRECATED void setID3v2FrameFactory(const ID3v2::FrameFactory *factory);
 
@@ -381,7 +381,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
-}
+  }  // namespace MPEG
+}  // namespace TagLib
 
 #endif

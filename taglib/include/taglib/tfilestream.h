@@ -154,6 +154,6 @@ namespace TagLib {
     FileStreamPrivate *d;
   };
 
-}
+}  // namespace TagLib
 
 #endif

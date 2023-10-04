@@ -30,9 +30,7 @@
 #include "audioproperties.h"
 
 namespace TagLib {
-
   namespace Mod {
-
     class TAGLIB_EXPORT Properties : public AudioProperties
     {
     public:
@@ -63,9 +61,6 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace Mod
+}  // namespace TagLib
 #endif

@@ -122,6 +122,6 @@ namespace TagLib {
     AudioPropertiesPrivate *d;
   };
 
-}
+}  // namespace TagLib
 
 #endif

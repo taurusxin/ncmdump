@@ -50,7 +50,7 @@ namespace TagLib {
       /*!
        * Parses an MPEG header based on \a data.
        *
-       * \deprecated
+       * \deprecated Use Header(File *, long, bool).
        */
       TAGLIB_DEPRECATED Header(const ByteVector &data);
 
@@ -172,7 +172,7 @@ namespace TagLib {
       class HeaderPrivate;
       HeaderPrivate *d;
     };
-  }
-}
+  }  // namespace MPEG
+}  // namespace TagLib
 
 #endif

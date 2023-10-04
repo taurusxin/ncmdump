@@ -170,7 +170,7 @@ namespace TagLib {
       HeaderPrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

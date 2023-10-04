@@ -223,6 +223,6 @@ namespace TagLib {
       class PagePrivate;
       PagePrivate *d;
     };
-  }
-}
+  }  // namespace Ogg
+}  // namespace TagLib
 #endif

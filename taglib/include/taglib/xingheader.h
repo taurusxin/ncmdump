@@ -123,7 +123,7 @@ namespace TagLib {
       class XingHeaderPrivate;
       XingHeaderPrivate *d;
     };
-  }
-}
+  }  // namespace MPEG
+}  // namespace TagLib
 
 #endif

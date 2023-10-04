@@ -117,7 +117,7 @@ namespace TagLib {
       class UniqueFileIdentifierFramePrivate;
       UniqueFileIdentifierFramePrivate *d;
     };
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

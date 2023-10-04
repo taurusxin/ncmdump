@@ -146,6 +146,6 @@ namespace TagLib {
       OwnershipFramePrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 #endif

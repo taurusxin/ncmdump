@@ -87,7 +87,7 @@ namespace TagLib {
       TAGLIB_DEPRECATED Frame *createFrame(const ByteVector &data, unsigned int version = 4) const;
 
       /*!
-       * \deprecated
+       * \deprecated Use createFrame(const ByteVector &, const Header *) const.
        */
       // BIC: remove
       Frame *createFrame(const ByteVector &data, Header *tagHeader) const;
@@ -163,7 +163,7 @@ namespace TagLib {
       FrameFactoryPrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

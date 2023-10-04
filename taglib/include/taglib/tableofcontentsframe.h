@@ -254,7 +254,7 @@ namespace TagLib {
       class TableOfContentsFramePrivate;
       TableOfContentsFramePrivate *d;
     };
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

@@ -202,7 +202,7 @@ namespace TagLib {
       class TagPrivate;
       TagPrivate *d;
     };
-  }
-}
+  }  // namespace APE
+}  // namespace TagLib
 
 #endif

@@ -196,6 +196,6 @@ namespace TagLib {
     class TagPrivate;
     TagPrivate *d;
   };
-}
+}  // namespace TagLib
 
 #endif

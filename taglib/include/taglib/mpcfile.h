@@ -195,7 +195,7 @@ namespace TagLib {
       void strip(int tags = AllTags);
 
       /*!
-       * \deprecated
+       * \deprecated Use strip().
        * \see strip
        */
       TAGLIB_DEPRECATED void remove(int tags = AllTags);
@@ -232,7 +232,7 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-  }
-}
+  }  // namespace MPC
+}  // namespace TagLib
 
 #endif

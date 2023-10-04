@@ -72,7 +72,7 @@ namespace TagLib {
        *
        * \note This method is just an alias of lengthInSeconds().
        *
-       * \deprecated
+       * \deprecated Use lengthInSeconds().
        */
       TAGLIB_DEPRECATED virtual int length() const;
 
@@ -152,7 +152,7 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-  }
-}
+  }  // namespace MPC
+}  // namespace TagLib
 
 #endif

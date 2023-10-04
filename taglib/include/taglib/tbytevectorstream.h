@@ -140,6 +140,6 @@ namespace TagLib {
     ByteVectorStreamPrivate *d;
   };
 
-}
+}  // namespace TagLib
 
 #endif

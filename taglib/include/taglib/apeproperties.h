@@ -53,7 +53,7 @@ namespace TagLib {
        * Create an instance of APE::Properties with the data read from the
        * APE::File \a file.
        *
-       * \deprecated
+       * \deprecated Use Properties(File *, long, ReadStyle).
        */
       TAGLIB_DEPRECATED Properties(File *file, ReadStyle style = Average);
 
@@ -74,7 +74,7 @@ namespace TagLib {
        *
        * \note This method is just an alias of lengthInSeconds().
        *
-       * \deprecated
+       * \deprecated Use lengthInSeconds().
        */
       TAGLIB_DEPRECATED virtual int length() const;
 
@@ -137,7 +137,7 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-  }
-}
+  }  // namespace APE
+}  // namespace TagLib
 
 #endif

@@ -62,9 +62,9 @@ namespace TagLib {
        * Convert the data from unsynchronized data to its original format.
        */
       TAGLIB_EXPORT ByteVector decode(const ByteVector &input);
-    }
+    }  // namespace SynchData
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

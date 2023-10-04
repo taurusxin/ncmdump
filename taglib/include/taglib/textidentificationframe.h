@@ -308,6 +308,6 @@ namespace TagLib {
       UserTextIdentificationFramePrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 #endif

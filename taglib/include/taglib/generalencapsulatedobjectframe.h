@@ -173,7 +173,7 @@ namespace TagLib {
       class GeneralEncapsulatedObjectFramePrivate;
       GeneralEncapsulatedObjectFramePrivate *d;
     };
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

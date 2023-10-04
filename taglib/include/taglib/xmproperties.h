@@ -79,7 +79,7 @@ namespace TagLib {
       class PropertiesPrivate;
       PropertiesPrivate *d;
     };
-  }
-}
+  }  // namespace XM
+}  // namespace TagLib
 
 #endif

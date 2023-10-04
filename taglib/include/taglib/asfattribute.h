@@ -33,10 +33,8 @@
 
 namespace TagLib
 {
-
   namespace ASF
   {
-
     class File;
     class Picture;
 
@@ -201,8 +199,7 @@ namespace TagLib
       class AttributePrivate;
       AttributePrivate *d;
     };
-  }
-
-}
+  }  // namespace ASF
+}  // namespace TagLib
 
 #endif

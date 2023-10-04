@@ -131,8 +131,8 @@ namespace TagLib {
         class FilePrivate;
         FilePrivate *d;
       };
-    }
-  }
-}
+    }  // namespace Speex
+  }  // namespace Ogg
+}  // namespace TagLib
 
 #endif

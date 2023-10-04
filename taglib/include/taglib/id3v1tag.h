@@ -196,7 +196,7 @@ namespace TagLib {
       class TagPrivate;
       TagPrivate *d;
     };
-  }
-}
+  }  // namespace ID3v1
+}  // namespace TagLib
 
 #endif

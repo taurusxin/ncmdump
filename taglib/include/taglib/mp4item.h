@@ -31,9 +31,7 @@
 #include "taglib_export.h"
 
 namespace TagLib {
-
   namespace MP4 {
-
     class TAGLIB_EXPORT Item
     {
     public:
@@ -85,9 +83,6 @@ namespace TagLib {
       class ItemPrivate;
       ItemPrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace MP4
+}  // namespace TagLib
 #endif

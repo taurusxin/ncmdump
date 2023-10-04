@@ -261,14 +261,14 @@ namespace TagLib {
      * Returns true if \a file can be opened for reading.  If the file does not
      * exist, this will return false.
      *
-     * \deprecated
+     * \deprecated Use system functions, e.g. access() (_access_s() on Windows).
      */
     TAGLIB_DEPRECATED static bool isReadable(const char *file);
 
     /*!
      * Returns true if \a file can be opened for writing.
      *
-     * \deprecated
+     * \deprecated Use system functions, e.g. access() (_access_s() on Windows).
      */
     TAGLIB_DEPRECATED static bool isWritable(const char *name);
 
@@ -318,6 +318,6 @@ namespace TagLib {
     FilePrivate *d;
   };
 
-}
+}  // namespace TagLib
 
 #endif

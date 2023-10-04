@@ -53,7 +53,7 @@ namespace TagLib {
          * Create an instance of WAV::Properties with the data read from the
          * ByteVector \a data.
          *
-         * \deprecated
+         * \deprecated Use Properties(File *, ReadStyle).
          */
         TAGLIB_DEPRECATED Properties(const ByteVector &data, ReadStyle style);
 
@@ -61,7 +61,7 @@ namespace TagLib {
          * Create an instance of WAV::Properties with the data read from the
          * ByteVector \a data and the length calculated using \a streamLength.
          *
-         * \deprecated
+         * \deprecated Use Properties(File *, ReadStyle).
          */
         TAGLIB_DEPRECATED Properties(const ByteVector &data, unsigned int streamLength, ReadStyle style);
 
@@ -82,7 +82,7 @@ namespace TagLib {
          *
          * \note This method is just an alias of lengthInSeconds().
          *
-         * \deprecated
+         * \deprecated Use lengthInSeconds().
          */
         TAGLIB_DEPRECATED virtual int length() const;
 
@@ -128,7 +128,7 @@ namespace TagLib {
          *
          * \note This method is just an alias of bitsPerSample().
          *
-         * \deprecated
+         * \deprecated Use bitsPerSample().
          */
         TAGLIB_DEPRECATED int sampleWidth() const;
 
@@ -156,8 +156,8 @@ namespace TagLib {
         class PropertiesPrivate;
         PropertiesPrivate *d;
       };
-    }
-  }
-}
+    }  // namespace WAV
+  }  // namespace RIFF
+}  // namespace TagLib
 
 #endif

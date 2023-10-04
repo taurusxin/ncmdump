@@ -35,6 +35,11 @@
 #include "flacpicture.h"
 #include "taglib_export.h"
 
+#ifdef _MSC_VER
+// Explained at end of tpropertymap.cpp
+extern template class TAGLIB_EXPORT TagLib::Map<TagLib::String, TagLib::StringList>;
+#endif
+
 namespace TagLib {
 
   namespace Ogg {
@@ -269,7 +274,7 @@ namespace TagLib {
       class XiphCommentPrivate;
       XiphCommentPrivate *d;
     };
-  }
-}
+  }  // namespace Ogg
+}  // namespace TagLib
 
 #endif

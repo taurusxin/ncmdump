@@ -33,10 +33,8 @@
 #include "mp4tag.h"
 
 namespace TagLib {
-
   //! An implementation of MP4 (AAC, ALAC, ...) metadata
   namespace MP4 {
-
     class Atoms;
 
     /*!
@@ -48,6 +46,19 @@ namespace TagLib {
     class TAGLIB_EXPORT File : public TagLib::File
     {
     public:
+      /*!
+       * This set of flags is used for strip() and is suitable for
+       * being OR-ed together.
+       */
+      enum TagTypes {
+        //! Empty set.  Matches no tag types.
+        NoTags  = 0x0000,
+        //! Matches MP4 tags.
+        MP4     = 0x0001,
+        //! Matches all tag types.
+        AllTags = 0xffff
+      };
+
       /*!
        * Constructs an MP4 file from \a file.  If \a readProperties is true the
        * file's audio properties will also be read.
@@ -115,6 +126,15 @@ namespace TagLib {
       bool save();
 
       /*!
+       * This will strip the tags that match the OR-ed together TagTypes from the
+       * file.  By default it strips all tags.  It returns true if the tags are
+       * successfully stripped.
+       *
+       * \note This will update the file immediately.
+       */
+      bool strip(int tags = AllTags);
+
+      /*!
        * Returns whether or not the file on disk actually has an MP4 tag, or the
        * file has a Metadata Item List (ilst) atom.
        */
@@ -135,9 +155,6 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace MP4
+}  // namespace TagLib
 #endif

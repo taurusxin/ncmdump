@@ -36,11 +36,9 @@
 #include "mp4item.h"
 
 namespace TagLib {
-
   namespace MP4 {
-
     /*!
-     * \deprecated
+     * \deprecated Use ItemMap.
      */
     TAGLIB_DEPRECATED typedef TagLib::Map<String, Item> ItemListMap;
     typedef TagLib::Map<String, Item> ItemMap;
@@ -72,7 +70,7 @@ namespace TagLib {
         virtual bool isEmpty() const;
 
         /*!
-         * \deprecated Use the item() and setItem() API instead
+         * \deprecated Use the item() and setItem() API instead.
          */
         TAGLIB_DEPRECATED ItemMap &itemListMap();
 
@@ -101,6 +99,11 @@ namespace TagLib {
          * \return True if the tag contains an entry for \a key.
          */
         bool contains(const String &key) const;
+
+        /*!
+         * Saves the associated file with the tag stripped.
+         */
+        bool strip();
 
         PropertyMap properties() const;
         void removeUnsupportedProperties(const StringList& properties);
@@ -156,9 +159,6 @@ namespace TagLib {
         class TagPrivate;
         TagPrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace MP4
+}  // namespace TagLib
 #endif

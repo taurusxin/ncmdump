@@ -34,9 +34,7 @@
 #include "modproperties.h"
 
 namespace TagLib {
-
   namespace Mod {
-
     class TAGLIB_EXPORT File : public TagLib::Mod::FileBase
     {
     public:
@@ -106,9 +104,6 @@ namespace TagLib {
       class FilePrivate;
       FilePrivate *d;
     };
-
-  }
-
-}
-
+  }  // namespace Mod
+}  // namespace TagLib
 #endif

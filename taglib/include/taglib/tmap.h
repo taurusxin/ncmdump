@@ -154,6 +154,14 @@ namespace TagLib {
     Map<Key, T> &erase(const Key &key);
 
     /*!
+     * Returns the value associated with \a key.
+     *
+     * If the map does not contain \a key, it returns defaultValue.
+     * If no defaultValue is specified, it returns a default-constructed value.
+     */
+    T value(const Key &key, const T &defaultValue = T()) const;
+
+    /*!
      * Returns a reference to the value associated with \a key.
      *
      * \note This has undefined behavior if the key is not present in the map.
@@ -194,7 +202,7 @@ namespace TagLib {
 #endif
   };
 
-}
+}  // namespace TagLib
 
 // Since GCC doesn't support the "export" keyword, we have to include the
 // implementation.

@@ -167,7 +167,7 @@ namespace TagLib {
       FooterPrivate *d;
     };
 
-  }
-}
+  }  // namespace APE
+}  // namespace TagLib
 
 #endif

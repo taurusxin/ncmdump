@@ -165,6 +165,6 @@ namespace TagLib {
     IOStream &operator=(const IOStream &);
   };
 
-}
+}  // namespace TagLib
 
 #endif

@@ -150,8 +150,8 @@ namespace TagLib {
         class FilePrivate;
         FilePrivate *d;
       };
-    }
-  }
-}
+    }  // namespace AIFF
+  }  // namespace RIFF
+}  // namespace TagLib
 
 #endif

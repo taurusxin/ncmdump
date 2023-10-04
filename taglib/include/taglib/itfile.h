@@ -103,7 +103,7 @@ namespace TagLib {
         class FilePrivate;
         FilePrivate *d;
     };
-  }
-}
+  }  // namespace IT
+}  // namespace TagLib
 
 #endif

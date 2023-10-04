@@ -55,6 +55,8 @@ namespace TagLib {
     {
       friend class Tag;
       friend class FrameFactory;
+      friend class TableOfContentsFrame;
+      friend class ChapterFrame;
 
     public:
 
@@ -503,7 +505,7 @@ namespace TagLib {
       ByteVector render() const;
 
       /*!
-       * \deprecated
+       * \deprecated Use fileAlterPreservation().
        */
       TAGLIB_DEPRECATED bool frameAlterPreservation() const;
 
@@ -515,7 +517,7 @@ namespace TagLib {
       HeaderPrivate *d;
     };
 
-  }
-}
+  }  // namespace ID3v2
+}  // namespace TagLib
 
 #endif

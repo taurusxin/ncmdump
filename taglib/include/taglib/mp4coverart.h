@@ -32,9 +32,7 @@
 #include "mp4atom.h"
 
 namespace TagLib {
-
   namespace MP4 {
-
     class TAGLIB_EXPORT CoverArt
     {
     public:
@@ -76,9 +74,6 @@ namespace TagLib {
     };
 
     typedef List<CoverArt> CoverArtList;
-
-  }
-
-}
-
+  }  // namespace MP4
+}  // namespace TagLib
 #endif

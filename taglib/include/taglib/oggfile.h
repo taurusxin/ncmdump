@@ -121,7 +121,7 @@ namespace TagLib {
       FilePrivate *d;
     };
 
-  }
-}
+  }  // namespace Ogg
+}  // namespace TagLib
 
 #endif

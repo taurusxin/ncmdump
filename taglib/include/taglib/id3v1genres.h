@@ -60,7 +60,7 @@ namespace TagLib {
      * will be returned.
      */
     int TAGLIB_EXPORT genreIndex(const String &name);
-  }
-}
+  }  // namespace ID3v1
+}  // namespace TagLib
 
 #endif

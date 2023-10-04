@@ -186,7 +186,8 @@ namespace TagLib {
       class TagPrivate;
       TagPrivate *d;
     };
-  }}
-}
+  }  // namespace Info
+}  // namespace RIFF
+}  // namespace TagLib
 
 #endif

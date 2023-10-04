@@ -106,7 +106,7 @@ namespace TagLib {
         class FilePrivate;
         FilePrivate *d;
     };
-  }
-}
+  }  // namespace XM
+}  // namespace TagLib
 
 #endif
