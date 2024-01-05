@@ -113,12 +113,12 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 }
 
 bool NeteaseCrypt::openFile(std::string const& path) {
-	try {
-		mFile.open(path, std::ios::in | std::ios::binary);
-	} catch (...) {
-		return false;
-	}
-	return true;
+    mFile.open(path, std::ios::in | std::ios::binary);
+    if (!mFile.is_open()) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 bool NeteaseCrypt::isNcmFile() {
@@ -143,7 +143,7 @@ int NeteaseCrypt::read(char *s, std::streamsize n) {
 	int gcount = mFile.gcount();
 
 	if (gcount <= 0) {
-		throw std::invalid_argument("can't read file");
+		throw std::invalid_argument(" can't read file");
 	}
 
 	return gcount;
@@ -292,15 +292,15 @@ NeteaseCrypt::~NeteaseCrypt() {
 
 NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 	if (!openFile(path)) {
-		throw std::invalid_argument("can't open file");
+		throw std::invalid_argument(" can't open file");
 	}
 
 	if (!isNcmFile()) {
-		throw std::invalid_argument("not netease protected file");
+		throw std::invalid_argument(" not netease protected file");
 	}
 
 	if (!mFile.seekg(2, mFile.cur)) {
-		throw std::invalid_argument("can't seek file");
+		throw std::invalid_argument(" can't seek file");
 	}
 
 	mFilepath = path;

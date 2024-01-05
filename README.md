@@ -74,5 +74,6 @@ make win32
 
 ## 使用
 
-1. 命令行下使用 `ncmdump [files]...`
-2. 直接 ncm 拖拽文件到二进制文件上
+1. 多文件：命令行下使用 `ncmdump file1 file2...`
+2. 文件夹批量处理：命令行下使用 `ncmdump -d folder`
+3. 直接 ncm 拖拽文件到二进制文件上
