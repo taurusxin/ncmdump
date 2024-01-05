@@ -16,7 +16,7 @@ macos-arm64:
 	strip ncmdump
 
 win32:
-	g++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag -Ltaglib/lib -Itaglib/include -static -O
+	g++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag -Ltaglib/lib -Itaglib/include -static -O -municode
 	strip ncmdump.exe
 
 clean:

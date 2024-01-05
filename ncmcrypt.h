@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <filesystem>
+
 class NeteaseMusicMetadata {
 
 private:
@@ -40,8 +42,8 @@ private:
 	enum NcmFormat { MP3, FLAC };
 
 private:
-	std::string mFilepath;
-	std::string mDumpFilepath;
+	std::filesystem::path mFilepath;
+	std::filesystem::path mDumpFilepath;
 	NcmFormat mFormat;
 	std::string mImageData;
 	std::ifstream mFile;
@@ -50,17 +52,17 @@ private:
 
 private:
 	bool isNcmFile();
-	bool openFile(std::string const&);
+	bool openFile(std::filesystem::path const&);
 	int read(char *s, std::streamsize n);
 	void buildKeyBox(unsigned char *key, int keyLen);
 	std::string mimeType(std::string& data);
 
 public:
-	const std::string& filepath() const { return mFilepath; }
-	const std::string& dumpFilepath() const { return mDumpFilepath; }
+	const std::filesystem::path& filepath() const { return mFilepath; }
+	const std::filesystem::path& dumpFilepath() const { return mDumpFilepath; }
 
 public:
-	NeteaseCrypt(std::string const&);
+	NeteaseCrypt(std::filesystem::path const&);
 	~NeteaseCrypt();
 
 public:

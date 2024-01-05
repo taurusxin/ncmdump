@@ -13,6 +13,8 @@
 #include <stdexcept>
 #include <string>
 
+#include <filesystem>
+
 const unsigned char NeteaseCrypt::sCoreKey[17]   = {0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0};
 const unsigned char NeteaseCrypt::sModifyKey[17] = {0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0};
 
@@ -50,14 +52,6 @@ static void replace(std::string& str, const std::string& from, const std::string
         str.replace(start_pos, from.length(), to);
         start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
     }
-}
-
-static std::string fileNameWithoutExt(const std::string& str)
-{
-	size_t lastPath = str.find_last_of("/\\");
-	std::string path = str.substr(lastPath+1);
-	size_t lastExt = path.find_last_of(".");
-	return path.substr(0, lastExt);
 }
 
 NeteaseMusicMetadata::~NeteaseMusicMetadata() {
@@ -112,7 +106,7 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 	}
 }
 
-bool NeteaseCrypt::openFile(std::string const& path) {
+bool NeteaseCrypt::openFile(std::filesystem::path const& path) {
     mFile.open(path, std::ios::in | std::ios::binary);
     if (!mFile.is_open()) {
         return false;
@@ -179,7 +173,7 @@ std::string NeteaseCrypt::mimeType(std::string& data) {
 }
 
 void NeteaseCrypt::FixMetadata() {
-	if (mDumpFilepath.length() <= 0) {
+	if (mDumpFilepath.string().length() <= 0) {
 		throw std::invalid_argument("must dump before");
 	}
 
@@ -243,7 +237,7 @@ void NeteaseCrypt::Dump() {
 	// 	replace(mDumpFilepath, ">", "＞");
 	// 	replace(mDumpFilepath, "|", "｜");
 	// } else {
-	mDumpFilepath = fileNameWithoutExt(mFilepath);
+	mDumpFilepath = mFilepath;
 	// }
 
 	n = 0x8000;
@@ -265,11 +259,11 @@ void NeteaseCrypt::Dump() {
 			// identify format
 			// ID3 format mp3
 			if (buffer[0] == 0x49 && buffer[1] == 0x44 && buffer[2] == 0x33) {
-				mDumpFilepath += ".mp3";
+				mDumpFilepath.replace_extension(".mp3");
 				mFormat = NeteaseCrypt::MP3;
 			} else {
-				mDumpFilepath += ".flac";
-				mFormat = NeteaseCrypt::FLAC;
+                mDumpFilepath.replace_extension(".flac");
+                mFormat = NeteaseCrypt::FLAC;
 			}
 
 			output.open(mDumpFilepath, output.out | output.binary);
@@ -290,7 +284,7 @@ NeteaseCrypt::~NeteaseCrypt() {
 	mFile.close();
 }
 
-NeteaseCrypt::NeteaseCrypt(std::string const& path) {
+NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 	if (!openFile(path)) {
 		throw std::invalid_argument(" can't open file");
 	}
