@@ -13,6 +13,28 @@
 
 2021年10月6日，原作者已经删库
 
+## 使用
+
+从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
+
+使用 `-h` 或 `--help` 参数来打印帮助
+
+```shell
+ncmdump -h
+```
+
+命令行下输入一个或多个文件
+
+```shell
+ncmdump file1 file2...
+```
+
+你可以使用 `-d` 参数来指定一个文件夹，对文件夹下的所有文件批量处理
+
+```shell
+ncmdump -d folder
+```
+
 ## 依赖库及不同平台编译方法
 
 ### 依赖库
@@ -70,10 +92,6 @@ make win32
 
 #### Visual Studio
 
+注意**VS的源代码还未上传，请先使用 MinGW 编译**
+
 使用 git 切换到 msvc 分支，使用 Visual Studio 打开 ncmdump.sln，编译即可
-
-## 使用
-
-1. 多文件：命令行下使用 `ncmdump file1 file2...`
-2. 文件夹批量处理：命令行下使用 `ncmdump -d folder`
-3. 直接 ncm 拖拽文件到二进制文件上
