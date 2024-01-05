@@ -99,7 +99,7 @@ int main(int argc, char **argv)
             WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, multiByteStr, multiByteStrSize, NULL, NULL);
             fs::path path(multiByteStr);
             #else
-            fs::path path(arg);
+            fs::path path(argv[i]);
             #endif
             files.push_back(path);
         }
