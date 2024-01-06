@@ -9,6 +9,8 @@
 #include <Windows.h>
 #endif
 
+#include "color.h"
+
 namespace fs = std::filesystem;
 
 void displayHelp() {
@@ -29,11 +31,11 @@ void processFile(const fs::path& filePath) {
         crypt.Dump();
         crypt.FixMetadata();
 
-        std::cout << "Done: '" << crypt.dumpFilepath().string() << "'" << std::endl;
+        std::cout << BOLDGREEN << "Done: '" << RESET << crypt.dumpFilepath().string() << "'" << std::endl;
     } catch (const std::invalid_argument& e) {
-        std::cout << "Exception: '" << filePath << "'" << e.what() << std::endl;
+        std::cerr << BOLDRED << "Exception: " << RESET << RED << e.what() << RESET << " '" << filePath.string() << "'" << std::endl;
     } catch (...) {
-        std::cout << "Unexpected exception while processing file: " << filePath << std::endl;
+        std::cerr << BOLDRED << "Unexpected exception while processing file: " << RESET << filePath.string() << std::endl;
     }
 }
 
