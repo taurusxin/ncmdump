@@ -45,13 +45,13 @@ static void aesEcbDecrypt(const unsigned char *key, std::string& src, std::strin
 }
 
 static void replace(std::string& str, const std::string& from, const std::string& to) {
-    if(from.empty())
-        return;
-    size_t start_pos = 0;
-    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
+	if(from.empty())
+		return;
+	size_t start_pos = 0;
+	while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
+	}
 }
 
 NeteaseMusicMetadata::~NeteaseMusicMetadata() {
@@ -107,12 +107,12 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 }
 
 bool NeteaseCrypt::openFile(std::filesystem::path const& path) {
-    mFile.open(path, std::ios::in | std::ios::binary);
-    if (!mFile.is_open()) {
-        return false;
-    } else {
-        return true;
-    }
+	mFile.open(path, std::ios::in | std::ios::binary);
+	if (!mFile.is_open()) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 bool NeteaseCrypt::isNcmFile() {
@@ -137,7 +137,7 @@ int NeteaseCrypt::read(char *s, std::streamsize n) {
 	int gcount = mFile.gcount();
 
 	if (gcount <= 0) {
-		throw std::invalid_argument(" can't read file");
+		throw std::invalid_argument("Can't read file");
 	}
 
 	return gcount;
@@ -219,38 +219,16 @@ void NeteaseCrypt::FixMetadata() {
 }
 
 void NeteaseCrypt::Dump() {
-	int n, i;
-
-	// mDumpFilepath.clear();
-	// mDumpFilepath.resize(1024);
-
-	// if (mMetaData) {
-	// 	mDumpFilepath = mMetaData->name();
-
-	// 	replace(mDumpFilepath, "\\", "＼");
-	// 	replace(mDumpFilepath, "/", "／");
-	// 	replace(mDumpFilepath, "?", "？");
-	// 	replace(mDumpFilepath, ":", "：");
-	// 	replace(mDumpFilepath, "*", "＊");
-	// 	replace(mDumpFilepath, "\"", "＂");
-	// 	replace(mDumpFilepath, "<", "＜");
-	// 	replace(mDumpFilepath, ">", "＞");
-	// 	replace(mDumpFilepath, "|", "｜");
-	// } else {
 	mDumpFilepath = mFilepath;
-	// }
 
-	n = 0x8000;
-	i = 0;
-
-	unsigned char buffer[n];
+	std::vector<unsigned char> buffer(0x8000);
 
 	std::ofstream output;
 
 	while (!mFile.eof()) {
-		n = read((char*)buffer, n);
+		int n = read((char*)buffer.data(), buffer.size());
 
-		for (i = 0; i < n; i++) {
+		for (int i = 0; i < n; i++) {
 			int j = (i + 1) & 0xff;
 			buffer[i] ^= mKeyBox[(mKeyBox[j] + mKeyBox[(mKeyBox[j] + j) & 0xff]) & 0xff];
 		}
@@ -262,14 +240,14 @@ void NeteaseCrypt::Dump() {
 				mDumpFilepath.replace_extension(".mp3");
 				mFormat = NeteaseCrypt::MP3;
 			} else {
-                mDumpFilepath.replace_extension(".flac");
-                mFormat = NeteaseCrypt::FLAC;
+				mDumpFilepath.replace_extension(".flac");
+				mFormat = NeteaseCrypt::FLAC;
 			}
 
 			output.open(mDumpFilepath, output.out | output.binary);
 		}
 
-		output.write((char*)buffer, n);
+		output.write((char*)buffer.data(), n);
 	}
 
 	output.flush();
@@ -286,36 +264,34 @@ NeteaseCrypt::~NeteaseCrypt() {
 
 NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 	if (!openFile(path)) {
-		throw std::invalid_argument(" can't open file");
+		throw std::invalid_argument("Can't open file");
 	}
 
 	if (!isNcmFile()) {
-		throw std::invalid_argument(" not netease protected file");
+		throw std::invalid_argument("Not netease protected file");
 	}
 
 	if (!mFile.seekg(2, mFile.cur)) {
-		throw std::invalid_argument(" can't seek file");
+		throw std::invalid_argument("Can't seek file");
 	}
 
 	mFilepath = path;
-
-	int i;
 
 	unsigned int n;
 	read(reinterpret_cast<char *>(&n), sizeof(n));
 
 	if (n <= 0) {
-		throw std::invalid_argument("broken ncm file");
+		throw std::invalid_argument("Broken NCM file");
 	}
 
-	char keydata[n];
-	read(keydata, n);
+	std::vector<char> keydata(n);
+	read(keydata.data(), n);
 
-	for (i = 0; i < n; i++) {
+	for (size_t i = 0; i < n; i++) {
 		keydata[i] ^= 0x64;
 	}
 
-	std::string rawKeyData(keydata, n);
+	std::string rawKeyData(keydata.begin(), keydata.end());
 	std::string mKeyData;
 
 	aesEcbDecrypt(sCoreKey, rawKeyData, mKeyData);
@@ -329,10 +305,10 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 
 		mMetaData = NULL;
 	} else {
-		char modifyData[n];
-		read(modifyData, n);
+		std::vector<char> modifyData(n);
+		read(modifyData.data(), n);
 
-		for (i = 0; i < n; i++) {
+		for (size_t i = 0; i < n; i++) {
 			modifyData[i] ^= 0x63;
 		}
 
@@ -340,7 +316,7 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 		std::string modifyOutData;
 		std::string modifyDecryptData;
 
-		swapModifyData = std::string(modifyData + 22, n - 22);
+		swapModifyData = std::string(modifyData.begin() + 22, modifyData.end());
 
 		// escape `163 key(Don't modify):`
 		Base64::Decode(swapModifyData, modifyOutData);
