@@ -1,5 +1,6 @@
 default:
-	@echo "Please choose a platform: linux, macos, win32"
+	@echo "Please choose a platform: linux, macos-intel, macos-arm64, win32"
+	@echo "Or use 'make clean' to clean up the build files"
 
 linux:
 	g++ main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump -ltag -std=c++17
