@@ -15,7 +15,13 @@
 
 ## 使用
 
-从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
+你可以使用 Homebrew 来安装 ncmdump
+
+```shell
+brew install ncmdump
+```
+
+或者从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
 
 使用 `-h` 或 `--help` 参数来打印帮助
 
