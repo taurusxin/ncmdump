@@ -19,11 +19,14 @@ jobs:
         update: true
         install: git mingw-w64-ucrt-x86_64-toolchain
 
+    - name: Configure build
+      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+
     - name: Build
-      run: mingw32-make win32
-    
+      run: cmake --build build -j 4
+
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ncmdump-artifacts
-        path: ncmdump.exe
+        path: build/ncmdump.exe
