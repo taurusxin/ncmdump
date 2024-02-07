@@ -5,8 +5,6 @@ project(ncmdump LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_BUILD_TYPE Release)
-
 option(BUILD_WIN32_STATIC "Build the program statically on Windows" ON)
 
 FILE(GLOB HEADERS ./*.h)

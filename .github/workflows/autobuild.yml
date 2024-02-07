@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - name: Install dependencies
       uses: msys2/setup-msys2@v2
@@ -19,11 +21,66 @@ jobs:
         update: true
         install: git mingw-w64-ucrt-x86_64-toolchain
 
+    - name: Configure build
+      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+
     - name: Build
-      run: mingw32-make win32
-    
+      run: cmake --build build -j 4
+
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: ncmdump-artifacts
-        path: ncmdump.exe
+        name: Windows amd64 Build
+        path: build/ncmdump.exe
+  
+  build_on_linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
+
+    - name: Configure build
+      run: cmake -DCMAKE_BUILD_TYPE=Release -B build
+
+    - name: Build
+      run: cmake --build build -j 4
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Linux amd64 Build
+        path: build/ncmdump
+
+  build_on_macos:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        brew update
+        brew install git cmake
+
+    - name: Configure build
+      run: cmake -DCMAKE_BUILD_TYPE=Release -B build
+
+    - name: Build
+      run: cmake --build build -j 4
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macOS amd64 Build
+        path: build/ncmdump
