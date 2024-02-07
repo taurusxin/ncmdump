@@ -22,6 +22,14 @@ target_include_directories(ncmdump PRIVATE taglib/taglib)
 target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
+if(WIN32)
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    target_link_options(ncmdump PRIVATE -O2 -municode)
+    if(BUILD_WIN32_STATIC)
+      target_link_options(ncmdump PRIVATE -static)
+    endif()
+  endif()
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS ncmdump
