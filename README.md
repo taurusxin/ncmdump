@@ -41,63 +41,36 @@ ncmdump file1 file2...
 ncmdump -d folder
 ```
 
-## 依赖库及不同平台编译方法
+## 编译项目
 
-### 依赖库
-
-* taglib
-
-### Linux / macOS
+克隆本仓库
 
 ```shell
-# CentOS
-yum install taglib-devel
-make linux
-
-# Ubuntu / Debian
-apt install libtag1-dev
-make linux
-
-# macOS with Intel chip
-brew install taglib
-make macos-intel
-
-# macOS with Apple Silicon (M1 / M2)
-brew install taglib
-make macos-arm64
+git clone https://github.com/taurusxin/ncmdump.git
 ```
 
-注意：Linux / macOS 为动态库支持，Linux 下静态编译需要手动编译 taglib 静态库，macOS 原生库不支持静态链接
-
-### Windows
-
-#### MinGW
-
-~~因为部分代码（例如常量引用等）在 msvc 下面编译不通过，本项目需要使用 MinGW 编译~~
-已经修改部分代码使得支持 msvc 编译，详见下面的 Visual Studio 部分
-
-下载 mingw-w64 的 Windows 版本，这里推荐从 [winlibs](https://winlibs.com/) 这个网站下载，编译器版本始终跟随上游保持最新
-
-将 mingw64/bin 添加到系统环境变量
-
-taglib 在 Windows 下已经编译好放在项目内，直接执行
+更新子模块
 
 ```shell
-mingw32-make win32
+cd ncmdump
+git submodule update --init --recursive
 ```
 
-生成的二进制程序为静态链接版本，可脱离运行库运行在裸机上
-
-#### msys2
+使用 CMake 配置项目。Windows 下若使用 GNU 套件，推荐使用 [msys2](https://www.msys2.org/) 或者 [winlibs](https://winlibs.com/)
 
 ```shell
-pacman -Syu
-git clone https://github.com/taurusxin/ncmdump && cd ncmdump
-make win32
+# Windows MinGW
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+
+# Windows MSVC
+cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -B build --config Release
+
+# Linux / macOS
+cmake -DCMAKE_BUILD_TYPE=Release -B build
 ```
 
-#### Visual Studio
+编译项目
 
-注意**VS的源代码还未上传，请先使用 MinGW 编译**
-
-使用 git 切换到 msvc 分支，使用 Visual Studio 打开 ncmdump.sln，编译即可
+```shell
+cmake --build build --target all -j 8
+```
