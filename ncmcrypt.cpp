@@ -4,11 +4,12 @@
 #include "cJSON.h"
 
 #define TAGLIB_STATIC
-#include <taglib/mpegfile.h>
-#include <taglib/flacfile.h>
-#include <taglib/attachedpictureframe.h>
-#include <taglib/id3v2tag.h>
-#include <taglib/tag.h>
+#include "taglib/toolkit/tfile.h"
+#include "taglib/mpeg/mpegfile.h"
+#include "taglib/flac/flacfile.h"
+#include "taglib/mpeg/id3v2/frames/attachedpictureframe.h"
+#include "taglib/mpeg/id3v2/id3v2tag.h"
+#include "taglib/tag.h"
 
 #include <stdexcept>
 #include <string>
