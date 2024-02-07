@@ -10,13 +10,14 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install dependencies
-      run: |
-        pacman -Syu --noconfirm
-        pacman -S --noconfirm mingw-w64-ucrt-x86_64-toolchain
-        echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: UCRT64
+        update: true
+        install: git mingw-w64-ucrt-x86_64-toolchain
 
     - name: Build
       run: mingw32-make win32
