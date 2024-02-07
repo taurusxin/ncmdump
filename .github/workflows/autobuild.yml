@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_on_windows:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm mingw-w64-ucrt-x86_64-toolchain
+        echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+
+    - name: Build
+      run: mingw32-make win32
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ncmdump-artifacts
+        path: ncmdump.exe
