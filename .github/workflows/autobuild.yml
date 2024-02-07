@@ -74,10 +74,10 @@ jobs:
         brew install git cmake
 
     - name: Configure build
-      run: cmake -B build
+      run: cmake -DCMAKE_BUILD_TYPE=Release -B build
 
     - name: Build
-      run: cmake -DCMAKE_BUILD_TYPE=Release --build build -j 4
+      run: cmake --build build -j 4
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
