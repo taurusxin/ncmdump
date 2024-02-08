@@ -54,7 +54,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Windows amd64 Build - MSVC
-        path: ${{ env.BUILD_PATH }}/ncmdump.exe
+        path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/ncmdump.exe
   
   build_on_linux:
     runs-on: ubuntu-latest
