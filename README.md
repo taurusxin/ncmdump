@@ -63,7 +63,7 @@ git submodule update --init --recursive
 cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
 
 # Windows MSVC
-cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -B build --config Release
+cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -B build
 
 # Linux / macOS
 cmake -DCMAKE_BUILD_TYPE=Release -B build
@@ -72,5 +72,9 @@ cmake -DCMAKE_BUILD_TYPE=Release -B build
 编译项目
 
 ```shell
+# Windows MSVC 需要在构建阶段指定 --config Release
+cmake --build build --target all -j 8 --config Release
+
+# Windows MinGW / Linux / macOS
 cmake --build build --target all -j 8
 ```

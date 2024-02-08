@@ -48,7 +48,7 @@ jobs:
       run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
 
     - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4 --config ${{ env.BUILD_TYPE }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
