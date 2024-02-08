@@ -34,6 +34,7 @@ jobs:
       with:
         name: Windows amd64 Build - MinGW
         path: ${{ env.BUILD_PATH }}/ncmdump.exe
+
   build_on_windows_msvc:
     runs-on: windows-latest
 
