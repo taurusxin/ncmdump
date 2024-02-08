@@ -1,11 +1,13 @@
 name: CI
-
+env:
+  BUILD_TYPE: Release
+  BUILD_PATH: build
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build_on_windows:
+  build_on_windows_msys2:
     runs-on: windows-latest
 
     steps:
@@ -22,16 +24,37 @@ jobs:
         install: git mingw-w64-ucrt-x86_64-toolchain
 
     - name: Configure build
-      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
 
     - name: Build
-      run: cmake --build build -j 4
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Windows amd64 Build
-        path: build/ncmdump.exe
+        name: Windows amd64 Build - MinGW
+        path: ${{ env.BUILD_PATH }}/ncmdump.exe
+
+  build_on_windows_msvc:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Configure build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
+
+    - name: Build
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows amd64 Build - MSVC
+        path: ${{ env.BUILD_PATH }}/ncmdump.exe
   
   build_on_linux:
     runs-on: ubuntu-latest
@@ -48,16 +71,16 @@ jobs:
         sudo apt-get install -y build-essential cmake
 
     - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=Release -B build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
 
     - name: Build
-      run: cmake --build build -j 4
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: Linux amd64 Build
-        path: build/ncmdump
+        path: ${{ env.BUILD_PATH }}/ncmdump
 
   build_on_macos:
     runs-on: macos-latest
@@ -74,13 +97,13 @@ jobs:
         brew install git cmake
 
     - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=Release -B build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
 
     - name: Build
-      run: cmake --build build -j 4
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: macOS amd64 Build
-        path: build/ncmdump
+        path: ${{ env.BUILD_PATH }}/ncmdump
