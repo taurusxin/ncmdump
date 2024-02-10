@@ -11,7 +11,7 @@ FILE(GLOB HEADERS ./*.h)
 FILE(GLOB SOURCES ./*.cpp)
 
 #Shared Lib
-add_library(ncmdumplib SHARED
+add_library(ncmdumplib
     ${HEADERS}
     ${SOURCES}
 )
@@ -22,6 +22,9 @@ target_include_directories(ncmdumplib PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdumplib PRIVATE taglib/taglib/mpeg/id3v2)
 
 target_compile_definitions(ncmdumplib PRIVATE NCMDUMP_LIBRARY)
+if(BUILD_SHARED_LIBS)
+    target_compile_definitions(ncmdumplib PRIVATE BUILD_SHARED_LIBS)
+endif()
 
 #Executable File
 add_executable(ncmdump

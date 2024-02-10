@@ -11,11 +11,17 @@
 #define Q_DECL_IMPORT __attribute__((visibility("default")))
 #endif
 
+#if defined(BUILD_SHARED_LIBS)
 #if defined(NCMDUMP_LIBRARY)
 #  define NCMDUMP_EXPORT Q_DECL_EXPORT
 #else
 #  define NCMDUMP_EXPORT Q_DECL_IMPORT
 #endif
+#else
+#  define NCMDUMP_EXPORT
+#endif
+
+
 
 class NeteaseCryptPrivateData;
 class NCMDUMP_EXPORT NeteaseCrypt {
