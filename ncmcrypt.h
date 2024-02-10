@@ -1,65 +1,31 @@
 #pragma once
 
-#include "aes.h"
-#include "cJSON.h"
-
-#include <iostream>
-#include <fstream>
-
 #include <filesystem>
 
-class NeteaseMusicMetadata {
+#if defined(_MSC_VER) || defined(WIN64) || defined(_WIN64) || defined(__WIN64__) || defined(WIN32) \
+|| defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#define Q_DECL_EXPORT __declspec(dllexport)
+#define Q_DECL_IMPORT __declspec(dllimport)
+#else
+#define Q_DECL_EXPORT __attribute__((visibility("default")))
+#define Q_DECL_IMPORT __attribute__((visibility("default")))
+#endif
+
+#if defined(NCMDUMP_LIBRARY)
+#  define NCMDUMP_EXPORT Q_DECL_EXPORT
+#else
+#  define NCMDUMP_EXPORT Q_DECL_IMPORT
+#endif
+
+class NeteaseCryptPrivateData;
+class NCMDUMP_EXPORT NeteaseCrypt {
 
 private:
-	std::string mAlbum;
-	std::string mArtist;
-	std::string mFormat;
-	std::string mName;
-	int mDuration;
-	int mBitrate;
-
-private:
-	cJSON* mRaw;
+    NeteaseCryptPrivateData *d;
 
 public:
-	NeteaseMusicMetadata(cJSON*);
-	~NeteaseMusicMetadata();
-    const std::string& name() const { return mName; }
-    const std::string& album() const { return mAlbum; }
-    const std::string& artist() const { return mArtist; }
-    const std::string& format() const { return mFormat; }
-    const int duration() const { return mDuration; }
-    const int bitrate() const { return mBitrate; }
-
-};
-
-class NeteaseCrypt {
-
-private:
-	static const unsigned char sCoreKey[17];
-	static const unsigned char sModifyKey[17];
-	static const unsigned char mPng[8];
-	enum NcmFormat { MP3, FLAC };
-
-private:
-	std::filesystem::path mFilepath;
-	std::filesystem::path mDumpFilepath;
-	NcmFormat mFormat;
-	std::string mImageData;
-	std::ifstream mFile;
-	unsigned char mKeyBox[256];
-	NeteaseMusicMetadata* mMetaData;
-
-private:
-	bool isNcmFile();
-	bool openFile(std::filesystem::path const&);
-	int read(char *s, std::streamsize n);
-	void buildKeyBox(unsigned char *key, int keyLen);
-	std::string mimeType(std::string& data);
-
-public:
-	const std::filesystem::path& filepath() const { return mFilepath; }
-	const std::filesystem::path& dumpFilepath() const { return mDumpFilepath; }
+    const std::filesystem::path& filepath() const;
+    const std::filesystem::path& dumpFilepath() const;
 
 public:
 	NeteaseCrypt(std::filesystem::path const&);

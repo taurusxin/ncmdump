@@ -9,18 +9,28 @@ add_subdirectory(taglib)
 
 FILE(GLOB HEADERS ./*.h)
 FILE(GLOB SOURCES ./*.cpp)
-add_executable(ncmdump
+
+#Shared Lib
+add_library(ncmdumplib SHARED
     ${HEADERS}
     ${SOURCES}
 )
-target_link_libraries(ncmdump tag)
-target_include_directories(ncmdump PRIVATE taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
-target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+target_link_libraries(ncmdumplib tag)
+target_include_directories(ncmdumplib PRIVATE taglib)
+target_include_directories(ncmdumplib PRIVATE taglib/taglib)
+target_include_directories(ncmdumplib PRIVATE taglib/taglib/toolkit)
+target_include_directories(ncmdumplib PRIVATE taglib/taglib/mpeg/id3v2)
+
+target_compile_definitions(ncmdumplib PRIVATE NCMDUMP_LIBRARY)
+
+#Executable File
+add_executable(ncmdump
+    main.cpp
+)
+target_link_libraries(ncmdump ncmdumplib)
 
 include(GNUInstallDirs)
-install(TARGETS ncmdump
+install(TARGETS ncmdumplib
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
