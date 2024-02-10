@@ -51,32 +51,30 @@ public:
 class NeteaseCryptPrivateData {
 
 public:
+    constexpr static const unsigned char sCoreKey[17] = { 0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0 };
+    constexpr static const unsigned char sModifyKey[17] = { 0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0 };
+    constexpr static const unsigned char mPng[8] = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+    enum NcmFormat {
+        UNKNOWN = 0,
+        MP3,
+        FLAC
+    };
+
+    DEFINE_VALUE(NcmFormat, format, NcmFormat::UNKNOWN)
+    DEFINE_VALUE(std::filesystem::path, filepath, "")
+    DEFINE_VALUE(std::filesystem::path, dumpFilepath, "")
+    DEFINE_VALUE(std::string, imageData, "")
+    std::ifstream file;
+    unsigned char keyBox[256];
+    NeteaseMusicMetadata* metaData;
+
+public:
     bool isNcmFile();
-    bool openFile(std::filesystem::path const&);
+    bool openFile(std::filesystem::path const);
     int read(char *s, std::streamsize n);
     void buildKeyBox(unsigned char *key, int keyLen);
-    std::string mimeType(std::string& data);
-
-public:
-    static const unsigned char sCoreKey[17];
-    static const unsigned char sModifyKey[17];
-    static const unsigned char mPng[8];
-    enum NcmFormat { MP3, FLAC };
-
-public:
-    std::filesystem::path mFilepath;
-    std::filesystem::path mDumpFilepath;
-    NcmFormat mFormat;
-    std::string mImageData;
-    std::ifstream mFile;
-    unsigned char mKeyBox[256];
-    NeteaseMusicMetadata* mMetaData;
+    std::string mimeType(std::string data);
 };
-
-const unsigned char NeteaseCryptPrivateData::sCoreKey[17]   = {0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0};
-const unsigned char NeteaseCryptPrivateData::sModifyKey[17] = {0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0};
-
-const unsigned char NeteaseCryptPrivateData::mPng[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
 
 static void aesEcbDecrypt(const unsigned char *key, std::string& src, std::string& dst) {
 	int n, i;
@@ -121,8 +119,7 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 		return;
 	}
 
-	cJSON *swap;
-	int artistLen, i;
+    cJSON *swap;
 
 	mRaw = raw;
 
@@ -136,15 +133,14 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
         set_album(std::string(cJSON_GetStringValue(swap)));
 	}
 
-	swap = cJSON_GetObjectItem(raw, "artist");
+    swap = cJSON_GetObjectItem(raw, "artist");
 	if (swap) {
-		artistLen = cJSON_GetArraySize(swap);
+        int artistLen = cJSON_GetArraySize(swap);
 
-		i = 0;
-		for (i = 0; i < artistLen-1; i++) {
+        for (int i = 0; i < artistLen - 1; i++) {
             set_artist(artist() + std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0))) + "/");
 		}
-        set_artist(artist() + std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0))));
+        set_artist(artist() + std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, artistLen - 1), 0))));
 	}
 
 	swap = cJSON_GetObjectItem(raw, "bitrate");
@@ -163,9 +159,9 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 	}
 }
 
-bool NeteaseCryptPrivateData::openFile(std::filesystem::path const& path) {
-    mFile.open(path, std::ios::in | std::ios::binary);
-    if (!mFile.is_open()) {
+bool NeteaseCryptPrivateData::openFile(std::filesystem::path const path) {
+    file.open(path, std::ios::in | std::ios::binary);
+    if (!file.is_open()) {
 		return false;
 	} else {
 		return true;
@@ -175,12 +171,12 @@ bool NeteaseCryptPrivateData::openFile(std::filesystem::path const& path) {
 bool NeteaseCryptPrivateData::isNcmFile() {
 	unsigned int header;
 
-    mFile.read(reinterpret_cast<char *>(&header), sizeof(header));
+    file.read(reinterpret_cast<char *>(&header), sizeof(header));
 	if (header != (unsigned int)0x4e455443) {
 		return false;
 	}
 
-    mFile.read(reinterpret_cast<char *>(&header), sizeof(header));
+    file.read(reinterpret_cast<char *>(&header), sizeof(header));
 	if (header != (unsigned int)0x4d414446) {
 		return false;
 	}
@@ -189,9 +185,9 @@ bool NeteaseCryptPrivateData::isNcmFile() {
 }
 
 int NeteaseCryptPrivateData::read(char *s, std::streamsize n) {
-    mFile.read(s, n);
+    file.read(s, n);
 
-    int gcount = mFile.gcount();
+    int gcount = file.gcount();
 
 	if (gcount <= 0) {
 		throw std::invalid_argument("Can't read file");
@@ -203,7 +199,7 @@ int NeteaseCryptPrivateData::read(char *s, std::streamsize n) {
 void NeteaseCryptPrivateData::buildKeyBox(unsigned char *key, int keyLen) {
 	int i;
 	for (i = 0; i < 256; ++i) {
-        mKeyBox[i] = (unsigned char)i;
+        keyBox[i] = (unsigned char)i;
 	}
 
 	unsigned char swap = 0;
@@ -213,15 +209,15 @@ void NeteaseCryptPrivateData::buildKeyBox(unsigned char *key, int keyLen) {
 
 	for (i = 0; i < 256; ++i)
 	{
-        swap = mKeyBox[i];
+        swap = keyBox[i];
 		c = ((swap + last_byte + key[key_offset++]) & 0xff);
 		if (key_offset >= keyLen) key_offset = 0;
-        mKeyBox[i] = mKeyBox[c]; mKeyBox[c] = swap;
+        keyBox[i] = keyBox[c]; keyBox[c] = swap;
 		last_byte = c;
 	}
 }
 
-std::string NeteaseCryptPrivateData::mimeType(std::string& data) {
+std::string NeteaseCryptPrivateData::mimeType(std::string data) {
     if (memcmp(data.c_str(), mPng, 8) == 0) {
 		return std::string("image/png");
 	}
@@ -230,33 +226,33 @@ std::string NeteaseCryptPrivateData::mimeType(std::string& data) {
 }
 
 void NeteaseCrypt::FixMetadata() {
-    if (d->mDumpFilepath.string().length() <= 0) {
+    if (d->dumpFilepath().string().length() <= 0) {
 		throw std::invalid_argument("must dump before");
 	}
 
 	TagLib::File *audioFile;
 	TagLib::Tag *tag;
-    TagLib::ByteVector vector(d->mImageData.c_str(), d->mImageData.length());
+    TagLib::ByteVector vector(d->imageData().c_str(), d->imageData().length());
 
-    if (d->mFormat == NeteaseCryptPrivateData::MP3) {
-        audioFile = new TagLib::MPEG::File(d->mDumpFilepath.c_str());
+    if (d->format() == NeteaseCryptPrivateData::MP3) {
+        audioFile = new TagLib::MPEG::File(d->dumpFilepath().c_str());
 		tag = dynamic_cast<TagLib::MPEG::File*>(audioFile)->ID3v2Tag(true);
 
-        if (d->mImageData.length() > 0) {
+        if (d->imageData().length() > 0) {
 			TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame;
-
-            frame->setMimeType(d->mimeType(d->mImageData));
+            
+            frame->setMimeType(d->mimeType(d->imageData()));
 			frame->setPicture(vector);
 
 			dynamic_cast<TagLib::ID3v2::Tag*>(tag)->addFrame(frame);
 		}
-    } else if (d->mFormat == NeteaseCryptPrivateData::FLAC) {
-        audioFile = new TagLib::FLAC::File(d->mDumpFilepath.c_str());
+    } else if (d->format() == NeteaseCryptPrivateData::FLAC) {
+        audioFile = new TagLib::FLAC::File(d->dumpFilepath().c_str());
 		tag = audioFile->tag();
 
-        if (d->mImageData.length() > 0) {
+        if (d->imageData().length() > 0) {
 			TagLib::FLAC::Picture *cover = new TagLib::FLAC::Picture;
-            cover->setMimeType(d->mimeType(d->mImageData));
+            cover->setMimeType(d->mimeType(d->imageData()));
 			cover->setType(TagLib::FLAC::Picture::FrontCover);
 			cover->setData(vector);
 
@@ -264,11 +260,11 @@ void NeteaseCrypt::FixMetadata() {
 		}
 	}
 
-    if (d->mMetaData != NULL) {
-        tag->setTitle(TagLib::String(d->mMetaData->name(), TagLib::String::UTF8));
-        tag->setArtist(TagLib::String(d->mMetaData->artist(), TagLib::String::UTF8));
-        tag->setAlbum(TagLib::String(d->mMetaData->album(), TagLib::String::UTF8));
-	}
+    if (d->metaData != NULL) {
+        tag->setTitle(TagLib::String(d->metaData->name(), TagLib::String::UTF8));
+        tag->setArtist(TagLib::String(d->metaData->artist(), TagLib::String::UTF8));
+        tag->setAlbum(TagLib::String(d->metaData->album(), TagLib::String::UTF8));
+    }
 
 	tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
 
@@ -276,32 +272,32 @@ void NeteaseCrypt::FixMetadata() {
 }
 
 void NeteaseCrypt::Dump() {
-    d->mDumpFilepath = d->mFilepath;
+    d->set_dumpFilepath(d->filepath());
 
 	std::vector<unsigned char> buffer(0x8000);
 
 	std::ofstream output;
 
-    while (!d->mFile.eof()) {
+    while (!d->file.eof()) {
         int n = d->read((char*)buffer.data(), buffer.size());
 
 		for (int i = 0; i < n; i++) {
 			int j = (i + 1) & 0xff;
-            buffer[i] ^= d->mKeyBox[(d->mKeyBox[j] + d->mKeyBox[(d->mKeyBox[j] + j) & 0xff]) & 0xff];
+            buffer[i] ^= d->keyBox[(d->keyBox[j] + d->keyBox[(d->keyBox[j] + j) & 0xff]) & 0xff];
 		}
 
 		if (!output.is_open()) {
 			// identify format
 			// ID3 format mp3
 			if (buffer[0] == 0x49 && buffer[1] == 0x44 && buffer[2] == 0x33) {
-                d->mDumpFilepath.replace_extension(".mp3");
-                d->mFormat = NeteaseCryptPrivateData::MP3;
+                d->set_dumpFilepath(d->dumpFilepath().replace_extension(".mp3"));
+                d->set_format(NeteaseCryptPrivateData::MP3);
 			} else {
-                d->mDumpFilepath.replace_extension(".flac");
-                d->mFormat = NeteaseCryptPrivateData::FLAC;
+                d->set_dumpFilepath(d->dumpFilepath().replace_extension(".flac"));
+                d->set_format(NeteaseCryptPrivateData::FLAC);
 			}
 
-            output.open(d->mDumpFilepath, output.out | output.binary);
+            output.open(d->dumpFilepath(), output.out | output.binary);
 		}
 
 		output.write((char*)buffer.data(), n);
@@ -312,11 +308,11 @@ void NeteaseCrypt::Dump() {
 }
 
 NeteaseCrypt::~NeteaseCrypt() {
-    if (d->mMetaData != NULL) {
-        delete d->mMetaData;
-	}
+    if (d->metaData != NULL) {
+        delete d->metaData;
+    }
 
-    d->mFile.close();
+    d->file.close();
     delete d;
 }
 
@@ -330,11 +326,11 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 		throw std::invalid_argument("Not netease protected file");
 	}
 
-    if (!d->mFile.seekg(2, d->mFile.cur)) {
+    if (!d->file.seekg(2, d->file.cur)) {
 		throw std::invalid_argument("Can't seek file");
 	}
 
-    d->mFilepath = path;
+    d->set_filepath(path);
 
 	unsigned int n;
     d->read(reinterpret_cast<char *>(&n), sizeof(n));
@@ -362,7 +358,7 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 	if (n <= 0) {
 		printf("[Warn] `%s` missing metadata infomation can't fix some infomation!\n", path.c_str());
 
-        d->mMetaData = NULL;
+        d->metaData = NULL;
 	} else {
 		std::vector<char> modifyData(n);
         d->read(modifyData.data(), n);
@@ -387,11 +383,11 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 
 		// std::cout << modifyDecryptData << std::endl;
 
-        d->mMetaData = new NeteaseMusicMetadata(cJSON_Parse(modifyDecryptData.c_str()));
+        d->metaData = new NeteaseMusicMetadata(cJSON_Parse(modifyDecryptData.c_str()));
 	}
 
 	// skip crc32 & unuse charset
-    if (!d->mFile.seekg(9, d->mFile.cur)) {
+    if (!d->file.seekg(9, d->file.cur)) {
 		throw std::invalid_argument("can't seek file");
 	}
 
@@ -401,16 +397,16 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 		char *imageData = (char*)malloc(n);
         d->read(imageData, n);
 
-        d->mImageData = std::string(imageData, n);
+        d->set_imageData(std::string(imageData, n));
 	} else {
 		printf("[Warn] `%s` missing album can't fix album image!\n", path.c_str());
 	}
 }
 
-const std::filesystem::path& NeteaseCrypt::filepath() const {
-    return d->mFilepath;
+const std::filesystem::path NeteaseCrypt::filepath() const {
+    return d->filepath();
 }
 
-const std::filesystem::path& NeteaseCrypt::dumpFilepath() const {
-    return d->mDumpFilepath;
+const std::filesystem::path NeteaseCrypt::dumpFilepath() const {
+    return d->dumpFilepath();
 }

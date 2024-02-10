@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include <filesystem>
+#include <cstring>
 
 #if defined(_WIN32) && defined(_MSC_VER)
 #include <Windows.h>

@@ -2,9 +2,14 @@ name: CI
 env:
   BUILD_TYPE: Release
   BUILD_PATH: build
-on:
+on: 
+  # push代码时触发workflow
   push:
-    branches: [ main ]
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
 
 jobs:
   build_on_windows_msys2:

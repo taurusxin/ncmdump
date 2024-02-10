@@ -20,12 +20,9 @@
 class NeteaseCryptPrivateData;
 class NCMDUMP_EXPORT NeteaseCrypt {
 
-private:
-    NeteaseCryptPrivateData *d;
-
 public:
-    const std::filesystem::path& filepath() const;
-    const std::filesystem::path& dumpFilepath() const;
+    const std::filesystem::path filepath() const;
+    const std::filesystem::path dumpFilepath() const;
 
 public:
 	NeteaseCrypt(std::filesystem::path const&);
@@ -34,4 +31,7 @@ public:
 public:
 	void Dump();
 	void FixMetadata();
+
+private:
+    NeteaseCryptPrivateData *d;
 };
