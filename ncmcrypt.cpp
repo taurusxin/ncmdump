@@ -17,28 +17,34 @@
 
 #include <filesystem>
 
+//定义变量
+#define DEFINE_VALUE(type, valueName, defaultValue) \
+    public: \
+    type valueName() const { return m_##valueName; } \
+    void set_##valueName(type valueName) { \
+        if(valueName == m_##valueName) { \
+            return; \
+    } \
+        m_##valueName = valueName; \
+} \
+    private: \
+    type m_##valueName = defaultValue; \
+    public: \
+
 class NeteaseMusicMetadata {
 
-private:
-    std::string mAlbum;
-    std::string mArtist;
-    std::string mFormat;
-    std::string mName;
-    int mDuration;
-    int mBitrate;
-
+    DEFINE_VALUE(std::string, album, "")
+    DEFINE_VALUE(std::string, artist, "")
+    DEFINE_VALUE(std::string, format, "")
+    DEFINE_VALUE(std::string, name, "")
+    DEFINE_VALUE(int, duration, 0)
+    DEFINE_VALUE(int, bitrate, 0)
 private:
     cJSON* mRaw;
 
 public:
     NeteaseMusicMetadata(cJSON*);
     ~NeteaseMusicMetadata();
-    const std::string& name() const { return mName; }
-    const std::string& album() const { return mAlbum; }
-    const std::string& artist() const { return mArtist; }
-    const std::string& format() const { return mFormat; }
-    const int duration() const { return mDuration; }
-    const int bitrate() const { return mBitrate; }
 
 };
 
@@ -122,12 +128,12 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 
 	swap = cJSON_GetObjectItem(raw, "musicName");
 	if (swap) {
-		mName = std::string(cJSON_GetStringValue(swap));
+        set_name(std::string(cJSON_GetStringValue(swap)));
 	}
 
 	swap = cJSON_GetObjectItem(raw, "album");
 	if (swap) {
-		mAlbum = std::string(cJSON_GetStringValue(swap));
+        set_album(std::string(cJSON_GetStringValue(swap)));
 	}
 
 	swap = cJSON_GetObjectItem(raw, "artist");
@@ -136,25 +142,24 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON* raw) {
 
 		i = 0;
 		for (i = 0; i < artistLen-1; i++) {
-			mArtist += std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0)));
-			mArtist += "/";
+            set_artist(artist() + std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0))) + "/");
 		}
-		mArtist += std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0)));
+        set_artist(artist() + std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0))));
 	}
 
 	swap = cJSON_GetObjectItem(raw, "bitrate");
 	if (swap) {
-		mBitrate = swap->valueint;
+        set_bitrate(swap->valueint);
 	}
 
 	swap = cJSON_GetObjectItem(raw, "duration");
-	if (swap) {
-		mDuration = swap->valueint;
+    if (swap) {
+        set_duration(swap->valueint);
 	}
 
 	swap = cJSON_GetObjectItem(raw, "format");
 	if (swap) {
-		mFormat = std::string(cJSON_GetStringValue(swap));
+        set_format(std::string(cJSON_GetStringValue(swap)));
 	}
 }
 
