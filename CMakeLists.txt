@@ -1,4 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.14)
+cmake_policy(SET CMP0077 NEW)
 
 project(ncmdump LANGUAGES CXX)
 
@@ -22,7 +23,7 @@ target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
 if(WIN32)
-  if(CMAKE_CXX_COMPILER_ID STREQUAL 'GNU')
+  if(CMAKE_COMPILER_IS_GNUCXX)
     target_link_options(ncmdump PRIVATE -O2 -municode)
   endif()
 endif()
