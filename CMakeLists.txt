@@ -5,6 +5,8 @@ project(ncmdump LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(WITH_ZLIB OFF)
+set(BUILD_TESTING OFF)
 add_subdirectory(taglib)
 
 FILE(GLOB HEADERS ./*.h)
@@ -20,7 +22,7 @@ target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
 if(WIN32)
-  if(CMAKE_COMPILER_IS_GNUCXX)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL 'GNU')
     target_link_options(ncmdump PRIVATE -O2 -municode)
   endif()
 endif()
