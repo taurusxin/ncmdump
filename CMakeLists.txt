@@ -1,11 +1,11 @@
 ﻿cmake_minimum_required(VERSION 3.14)
-cmake_policy(SET CMP0077 NEW)
 
 project(ncmdump LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 set(WITH_ZLIB OFF)
 set(BUILD_TESTING OFF)
 add_subdirectory(taglib)
