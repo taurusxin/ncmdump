@@ -24,7 +24,7 @@ target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
 if(WIN32)
   if(CMAKE_COMPILER_IS_GNUCXX)
-    target_link_options(ncmdump PRIVATE -O2 -municode)
+    target_link_options(ncmdump PRIVATE -municode)
   endif()
 endif()
 
