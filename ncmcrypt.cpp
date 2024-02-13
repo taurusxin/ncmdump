@@ -302,7 +302,7 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 	read(reinterpret_cast<char *>(&n), sizeof(n));
 
 	if (n <= 0) {
-		printf("[Warn] `%s` missing metadata infomation can't fix some infomation!\n", path.c_str());
+		std::cout << "[Warn] " << path.string() << " missing metadata infomation can't fix some infomation!" << std::endl;
 
 		mMetaData = NULL;
 	} else {
@@ -345,6 +345,6 @@ NeteaseCrypt::NeteaseCrypt(std::filesystem::path const& path) {
 
 		mImageData = std::string(imageData, n);
 	} else {
-		printf("[Warn] `%s` missing album can't fix album image!\n", path.c_str());
+		std::cout << "[Warn] " << path.string() << " missing album can't fix album image!" << std::endl;
 	}
 }
