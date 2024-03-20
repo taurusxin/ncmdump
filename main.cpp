@@ -53,8 +53,10 @@ int wmain(int argc, wchar_t* utf16argv[])
 int main(int argc, char **argv)
 #endif
 {
-#if defined(_WIN32) && defined(__MINGW64__)
+#if defined(_WIN32)
+#if defined(__MINGW64__)
     SetConsoleOutputCP(CP_UTF8);
+#endif
     char **argv = (char**)malloc(sizeof(char *) * argc);
     for (int i = 0; i < argc; ++i) {
         int utf8_size = WideCharToMultiByte(CP_UTF8, 0, utf16argv[i], -1, NULL, 0, NULL, NULL);
