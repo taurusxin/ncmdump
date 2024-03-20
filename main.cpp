@@ -73,18 +73,10 @@ int main(int argc, char **argv)
 
     bool folderProvided = false;
 
-// #if defined(_WIN32)
-// #define COMPARE_STR(s1, s2) (wcscmp(s1, s2) == 0)
-// #define HELP_SHORT L"-h"
-// #define HELP_LONG L"--help"
-// #define FOLDER L"-d"
-// #else
 #define COMPARE_STR(s1, s2) (strcmp(s1, s2) == 0)
 #define HELP_SHORT "-h"
 #define HELP_LONG "--help"
 #define FOLDER "-d"
-// #endif
-
     for (int i = 1; i < argc; ++i) {
         if (COMPARE_STR(argv[i], HELP_SHORT) || COMPARE_STR(argv[i], HELP_LONG)) {
             displayHelp();
@@ -101,13 +93,7 @@ int main(int argc, char **argv)
                 return 1;
             }
         } else {
-#if defined(_WIN32)
-            // std::wstring wFilePath(argv[i]);
-            // fs::path path(wFilePath);
             fs::path path(argv[i]);
-#else
-            fs::path path(argv[i]);
-#endif
             files.push_back(path);
         }
     }
