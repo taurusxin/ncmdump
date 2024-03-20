@@ -22,7 +22,7 @@ void displayHelp() {
 
 void processFile(const fs::path& filePath) {
     if (fs::exists(filePath) == false) {
-        std::cerr << "Error: file '" << filePath.string() << "' does not exist." << std::endl;
+        std::cerr << BOLDRED << "Error: " << RESET << "file '" << filePath.string() << "' does not exist." << std::endl;
         return;
     }
 
@@ -48,13 +48,19 @@ void processFilesInFolder(const fs::path& folderPath) {
 }
 
 #if defined(_WIN32)
-int wmain(int argc, wchar_t* argv[])
+int wmain(int argc, wchar_t* utf16argv[])
 #else
 int main(int argc, char **argv)
 #endif
 {
 #if defined(_WIN32) && defined(__MINGW64__)
     SetConsoleOutputCP(CP_UTF8);
+    char **argv = (char**)malloc(sizeof(char *) * argc);
+    for (int i = 0; i < argc; ++i) {
+        int utf8_size = WideCharToMultiByte(CP_UTF8, 0, utf16argv[i], -1, NULL, 0, NULL, NULL);
+        argv[i] = (char*)malloc(utf8_size);
+        WideCharToMultiByte(CP_UTF8, 0, utf16argv[i], -1, argv[i], utf8_size, NULL, NULL);
+    }
 #endif
 
     if (argc <= 1) {
@@ -67,17 +73,17 @@ int main(int argc, char **argv)
 
     bool folderProvided = false;
 
-#if defined(_WIN32)
-#define COMPARE_STR(s1, s2) (wcscmp(s1, s2) == 0)
-#define HELP_SHORT L"-h"
-#define HELP_LONG L"--help"
-#define FOLDER L"-d"
-#else
+// #if defined(_WIN32)
+// #define COMPARE_STR(s1, s2) (wcscmp(s1, s2) == 0)
+// #define HELP_SHORT L"-h"
+// #define HELP_LONG L"--help"
+// #define FOLDER L"-d"
+// #else
 #define COMPARE_STR(s1, s2) (strcmp(s1, s2) == 0)
 #define HELP_SHORT "-h"
 #define HELP_LONG "--help"
 #define FOLDER "-d"
-#endif
+// #endif
 
     for (int i = 1; i < argc; ++i) {
         if (COMPARE_STR(argv[i], HELP_SHORT) || COMPARE_STR(argv[i], HELP_LONG)) {
@@ -96,8 +102,9 @@ int main(int argc, char **argv)
             }
         } else {
 #if defined(_WIN32)
-            std::wstring wFilePath(argv[i]);
-            fs::path path(wFilePath);
+            // std::wstring wFilePath(argv[i]);
+            // fs::path path(wFilePath);
+            fs::path path(argv[i]);
 #else
             fs::path path(argv[i]);
 #endif
