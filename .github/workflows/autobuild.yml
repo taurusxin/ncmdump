@@ -28,6 +28,9 @@ jobs:
 
     - name: Build
       run: cmake --build ${{ env.BUILD_PATH }} -j 4
+    
+    - name: Strip
+      run: strip ${{ env.BUILD_PATH }}/ncmdump.exe
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
