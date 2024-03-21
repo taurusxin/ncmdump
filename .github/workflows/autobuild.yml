@@ -96,7 +96,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        brew update
         brew install git cmake
 
     - name: Configure build
