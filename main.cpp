@@ -58,21 +58,14 @@ void processFilesInFolder(const fs::path &folderPath)
     }
 }
 
-#if defined(_WIN32)
-int wmain(int argc, wchar_t *wideargv[])
+#if defined(_WIN32) && defined(__MINGW64__)
+int wmain(int argc, wchar_t *argv[])
 #else
 int main(int argc, char **argv)
 #endif
 {
 #if defined(_WIN32)
     SetConsoleOutputCP(CP_UTF8);
-    char **argv = (char **)malloc(sizeof(char *) * argc);
-    for (int i = 0; i < argc; ++i)
-    {
-        int utf8_size = WideCharToMultiByte(CP_UTF8, 0, wideargv[i], -1, NULL, 0, NULL, NULL);
-        argv[i] = (char *)malloc(utf8_size);
-        WideCharToMultiByte(CP_UTF8, 0, wideargv[i], -1, argv[i], utf8_size, NULL, NULL);
-    }
 #endif
 
     if (argc <= 1)
@@ -86,10 +79,17 @@ int main(int argc, char **argv)
 
     bool folderProvided = false;
 
+#if defined(_WIN32) && defined(__MINGW64__)
+#define COMPARE_STR(s1, s2) (wcscmp(s1, s2) == 0)
+#define HELP_SHORT L"-h"
+#define HELP_LONG L"--help"
+#define FOLDER L"-d"
+#else
 #define COMPARE_STR(s1, s2) (strcmp(s1, s2) == 0)
 #define HELP_SHORT "-h"
 #define HELP_LONG "--help"
 #define FOLDER "-d"
+#endif
     for (int i = 1; i < argc; ++i)
     {
         if (COMPARE_STR(argv[i], HELP_SHORT) || COMPARE_STR(argv[i], HELP_LONG))
@@ -115,7 +115,15 @@ int main(int argc, char **argv)
         }
         else
         {
+#if defined(_WIN32) && defined(__MINGW64__)
+            int utf8_size = WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, NULL, 0, NULL, NULL);
+            char* str = new char[utf8_size];
+            WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, str, utf8_size, NULL, NULL);
+
+            fs::path path(str);
+#else
             fs::path path(argv[i]);
+#endif
             files.push_back(path);
         }
     }
