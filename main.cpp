@@ -60,8 +60,9 @@ void processFilesInFolder(const fs::path &folderPath)
 
 int main(int argc, char **argv)
 {
+#if defined(_WIN32)
     win32_utf8argv(&argc, &argv);
-
+#endif
     if (argc <= 1)
     {
         displayHelp();
