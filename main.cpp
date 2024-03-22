@@ -41,10 +41,10 @@ void processFile(const fs::path &filePath)
     {
         std::cerr << BOLDRED << "Exception: " << RESET << RED << e.what() << RESET << " '" << filePath.u8string() << "'" << std::endl;
     }
-    // catch (...)
-    // {
-    //     std::cerr << BOLDRED << "Unexpected exception while processing file: " << RESET << filePath.u8string() << std::endl;
-    // }
+    catch (...)
+    {
+        std::cerr << BOLDRED << "Unexpected exception while processing file: " << RESET << filePath.u8string() << std::endl;
+    }
 }
 
 void processFilesInFolder(const fs::path &folderPath)
