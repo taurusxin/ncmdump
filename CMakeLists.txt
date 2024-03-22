@@ -15,7 +15,14 @@ if(MSVC)
 endif()
 
 FILE(GLOB HEADERS ./*.h)
-FILE(GLOB SOURCES ./*.cpp)
+FILE(GLOB COMMON_SOURCES cJSON.cpp aes.cpp main.cpp ncmcrypt.cpp)
+FILE(GLOB WIN_SOURCES win32_init.cpp)
+
+if(WIN32)
+  set(SOURCES ${COMMON_SOURCES} ${WIN_SOURCES})
+else()
+  set(SOURCES ${COMMON_SOURCES})
+endif()
 add_executable(ncmdump
   ${HEADERS}
   ${SOURCES}
@@ -28,7 +35,7 @@ target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
 if(WIN32)
   if(CMAKE_COMPILER_IS_GNUCXX)
-    target_link_options(ncmdump PRIVATE -municode -static)
+    target_link_options(ncmdump PRIVATE -static)
   endif()
 endif()
 
