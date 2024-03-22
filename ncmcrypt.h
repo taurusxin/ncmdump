@@ -42,7 +42,7 @@ private:
 	enum NcmFormat { MP3, FLAC };
 
 private:
-	std::filesystem::path mFilepath;
+	std::string mFilepath;
 	std::filesystem::path mDumpFilepath;
 	NcmFormat mFormat;
 	std::string mImageData;
@@ -52,17 +52,17 @@ private:
 
 private:
 	bool isNcmFile();
-	bool openFile(std::filesystem::path const&);
+	bool openFile(std::string const&);
 	int read(char *s, std::streamsize n);
 	void buildKeyBox(unsigned char *key, int keyLen);
 	std::string mimeType(std::string& data);
 
 public:
-	const std::filesystem::path& filepath() const { return mFilepath; }
-	const std::filesystem::path& dumpFilepath() const { return mDumpFilepath; }
+	const std::string& filepath() const { return mFilepath; }
+	const std::filesystem::path dumpFilepath() const { return mDumpFilepath; }
 
 public:
-	NeteaseCrypt(std::filesystem::path const&);
+	NeteaseCrypt(std::string const&);
 	~NeteaseCrypt();
 
 public:

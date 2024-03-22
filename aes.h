@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include <string.h>
 #include <stdio.h>
 
-class AES {
+class AES
+{
 
 public:
     AES();
@@ -16,21 +17,21 @@ private:
     //
     int mNb;
 
-    //word length of the secret key used in one turn 
+    // word length of the secret key used in one turn
     int mNk;
 
-    //number of turns
+    // number of turns
     int mNr;
 
-    //the secret key,which can be 16bytes，24bytes or 32bytes
+    // the secret key,which can be 16bytes，24bytes or 32bytes
     unsigned char mKey[32];
 
-    //the extended key,which can be 176bytes,208bytes,240bytes
+    // the extended key,which can be 176bytes,208bytes,240bytes
     unsigned char mW[60][4];
 
     static unsigned char sBox[];
     static unsigned char invSBox[];
-    //constant 
+    // constant
     static unsigned char rcon[];
     void setKey(const unsigned char *key);
 
@@ -51,7 +52,6 @@ private:
     void rotWord(unsigned char w[]);
     void subWord(unsigned char w[]);
 
-    //get the secret key
-    void getKeyAt(unsigned char key[][4],int i);
-
+    // get the secret key
+    void getKeyAt(unsigned char key[][4], int i);
 };

@@ -6,7 +6,7 @@
 #include <filesystem>
 
 #if defined(_WIN32)
-#include <Windows.h>
+#include "platform.h"
 #endif
 
 #include "color.h"
@@ -25,26 +25,26 @@ void processFile(const fs::path &filePath)
 {
     if (fs::exists(filePath) == false)
     {
-        std::cerr << BOLDRED << "Error: " << RESET << "file '" << filePath.string() << "' does not exist." << std::endl;
+        std::cerr << BOLDRED << "Error: " << RESET << "file '" << filePath.u8string() << "' does not exist." << std::endl;
         return;
     }
 
     try
     {
-        NeteaseCrypt crypt(filePath.string());
+        NeteaseCrypt crypt(filePath.u8string());
         crypt.Dump();
         crypt.FixMetadata();
 
-        std::cout << BOLDGREEN << "Done: '" << RESET << crypt.dumpFilepath().string() << "'" << std::endl;
+        std::cout << BOLDGREEN << "Done: " << RESET << "'" << crypt.dumpFilepath().u8string() << "'" << std::endl;
     }
     catch (const std::invalid_argument &e)
     {
-        std::cerr << BOLDRED << "Exception: " << RESET << RED << e.what() << RESET << " '" << filePath.string() << "'" << std::endl;
+        std::cerr << BOLDRED << "Exception: " << RESET << RED << e.what() << RESET << " '" << filePath.u8string() << "'" << std::endl;
     }
-    catch (...)
-    {
-        std::cerr << BOLDRED << "Unexpected exception while processing file: " << RESET << filePath.string() << std::endl;
-    }
+    // catch (...)
+    // {
+    //     std::cerr << BOLDRED << "Unexpected exception while processing file: " << RESET << filePath.u8string() << std::endl;
+    // }
 }
 
 void processFilesInFolder(const fs::path &folderPath)
@@ -58,22 +58,9 @@ void processFilesInFolder(const fs::path &folderPath)
     }
 }
 
-#if defined(_WIN32)
-int wmain(int argc, wchar_t *wideargv[])
-#else
 int main(int argc, char **argv)
-#endif
 {
-#if defined(_WIN32)
-    SetConsoleOutputCP(CP_UTF8);
-    char **argv = (char **)malloc(sizeof(char *) * argc);
-    for (int i = 0; i < argc; ++i)
-    {
-        int utf8_size = WideCharToMultiByte(CP_UTF8, 0, wideargv[i], -1, NULL, 0, NULL, NULL);
-        argv[i] = (char *)malloc(utf8_size);
-        WideCharToMultiByte(CP_UTF8, 0, wideargv[i], -1, argv[i], utf8_size, NULL, NULL);
-    }
-#endif
+    win32_utf8argv(&argc, &argv);
 
     if (argc <= 1)
     {
@@ -115,7 +102,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            fs::path path(argv[i]);
+            fs::path path = fs::u8path(argv[i]);
             files.push_back(path);
         }
     }

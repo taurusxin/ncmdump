@@ -10,6 +10,10 @@ set(WITH_ZLIB OFF)
 set(BUILD_TESTING OFF)
 add_subdirectory(taglib)
 
+if(MSVC)
+  add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>")
+endif()
+
 FILE(GLOB HEADERS ./*.h)
 FILE(GLOB SOURCES ./*.cpp)
 add_executable(ncmdump
