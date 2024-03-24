@@ -15,20 +15,33 @@ if(MSVC)
 endif()
 
 FILE(GLOB HEADERS ./src/include/*.h)
-FILE(GLOB COMMON_SOURCES ./src/*.cpp ./src/utils/*.cpp)
-FILE(GLOB WIN_SOURCES ./src/platform/win32_init.cpp)
-
+FILE(GLOB COMMON_SOURCES ./src/ncmcrypt.cpp ./src/utils/*.cpp)
+FILE(GLOB EXECUTABLE_SOURCES ./src/main.cpp)
+FILE(GLOB LIBRARY_SOURCES ./src/lib/libncmdump.cpp)
+FILE(GLOB WIN_EXEC_SOURCES ./src/platform/win32_init.cpp)
 
 if(WIN32)
-  set(SOURCES ${COMMON_SOURCES} ${WIN_SOURCES})
+  add_executable(ncmdump
+    ${HEADERS}
+    ${COMMON_SOURCES}
+    ${EXECUTABLE_SOURCES}
+    ${WIN_EXEC_SOURCES}
+  )
 else()
-  set(SOURCES ${COMMON_SOURCES})
+  add_executable(ncmdump
+    ${HEADERS}
+    ${COMMON_SOURCES}
+    ${EXECUTABLE_SOURCES}
+  )
 endif()
-add_executable(ncmdump
+
+add_library(libncmdump SHARED
   ${HEADERS}
-  ${SOURCES}
+  ${COMMON_SOURCES}
+  ${LIBRARY_SOURCES}
 )
 
+# executable target
 target_include_directories(ncmdump PRIVATE src/include)
 
 target_link_libraries(ncmdump tag)
@@ -37,9 +50,19 @@ target_include_directories(ncmdump PRIVATE taglib/taglib)
 target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
 
+# library target
+target_include_directories(libncmdump PRIVATE src/include)
+
+target_link_libraries(libncmdump tag)
+target_include_directories(libncmdump PRIVATE taglib)
+target_include_directories(libncmdump PRIVATE taglib/taglib)
+target_include_directories(libncmdump PRIVATE taglib/taglib/toolkit)
+target_include_directories(libncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+
 if(WIN32)
   if(CMAKE_COMPILER_IS_GNUCXX)
     target_link_options(ncmdump PRIVATE -static)
+    target_link_options(libncmdump PRIVATE -static)
   endif()
 endif()
 
