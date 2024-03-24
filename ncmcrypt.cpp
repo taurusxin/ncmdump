@@ -94,12 +94,18 @@ NeteaseMusicMetadata::NeteaseMusicMetadata(cJSON *raw)
         artistLen = cJSON_GetArraySize(swap);
 
         i = 0;
-        for (i = 0; i < artistLen - 1; i++)
+        for (i = 0; i < artistLen; i++)
         {
-            mArtist += std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0)));
-            mArtist += "/";
+            auto artist = cJSON_GetArrayItem(swap, i);
+            if (cJSON_GetArraySize(artist) > 0)
+            {
+                if (!mArtist.empty())
+                {
+                    mArtist += "/";
+                }
+                mArtist += std::string(cJSON_GetStringValue(cJSON_GetArrayItem(artist, 0)));
+            }
         }
-        mArtist += std::string(cJSON_GetStringValue(cJSON_GetArrayItem(cJSON_GetArrayItem(swap, i), 0)));
     }
 
     swap = cJSON_GetObjectItem(raw, "bitrate");
