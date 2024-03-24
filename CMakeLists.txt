@@ -54,6 +54,15 @@ else()
   )
 endif()
 
+# executable target
+target_include_directories(ncmdump PRIVATE src/include)
+
+target_link_libraries(ncmdump tag)
+target_include_directories(ncmdump PRIVATE taglib)
+target_include_directories(ncmdump PRIVATE taglib/taglib)
+target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
+target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+
 include(GNUInstallDirs)
 install(TARGETS ncmdump
   BUNDLE DESTINATION .
