@@ -27,43 +27,31 @@ if(WIN32)
     ${EXECUTABLE_SOURCES}
     ${WIN_EXEC_SOURCES}
   )
+  add_library(libncmdump SHARED
+    ${HEADERS}
+    ${COMMON_SOURCES}
+    ${LIBRARY_SOURCES}
+  )
+
+  target_include_directories(libncmdump PRIVATE src/include)
+
+  target_link_libraries(libncmdump tag)
+  target_include_directories(libncmdump PRIVATE taglib)
+  target_include_directories(libncmdump PRIVATE taglib/taglib)
+  target_include_directories(libncmdump PRIVATE taglib/taglib/toolkit)
+  target_include_directories(libncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    # static link when using MinGW
+    target_link_options(ncmdump PRIVATE -static)
+    target_link_options(libncmdump PRIVATE -static)
+  endif()
 else()
   add_executable(ncmdump
     ${HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
   )
-endif()
-
-add_library(libncmdump SHARED
-  ${HEADERS}
-  ${COMMON_SOURCES}
-  ${LIBRARY_SOURCES}
-)
-
-# executable target
-target_include_directories(ncmdump PRIVATE src/include)
-
-target_link_libraries(ncmdump tag)
-target_include_directories(ncmdump PRIVATE taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
-target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
-
-# library target
-target_include_directories(libncmdump PRIVATE src/include)
-
-target_link_libraries(libncmdump tag)
-target_include_directories(libncmdump PRIVATE taglib)
-target_include_directories(libncmdump PRIVATE taglib/taglib)
-target_include_directories(libncmdump PRIVATE taglib/taglib/toolkit)
-target_include_directories(libncmdump PRIVATE taglib/taglib/mpeg/id3v2)
-
-if(WIN32)
-  if(CMAKE_COMPILER_IS_GNUCXX)
-    target_link_options(ncmdump PRIVATE -static)
-    target_link_options(libncmdump PRIVATE -static)
-  endif()
 endif()
 
 include(GNUInstallDirs)
