@@ -14,9 +14,10 @@ if(MSVC)
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>")
 endif()
 
-FILE(GLOB HEADERS ./*.h)
-FILE(GLOB COMMON_SOURCES cJSON.cpp aes.cpp main.cpp ncmcrypt.cpp)
-FILE(GLOB WIN_SOURCES win32_init.cpp)
+FILE(GLOB HEADERS ./src/include/*.h)
+FILE(GLOB COMMON_SOURCES ./src/*.cpp ./src/utils/*.cpp)
+FILE(GLOB WIN_SOURCES ./src/platform/win32_init.cpp)
+
 
 if(WIN32)
   set(SOURCES ${COMMON_SOURCES} ${WIN_SOURCES})
@@ -27,6 +28,9 @@ add_executable(ncmdump
   ${HEADERS}
   ${SOURCES}
 )
+
+target_include_directories(ncmdump PRIVATE src/include)
+
 target_link_libraries(ncmdump tag)
 target_include_directories(ncmdump PRIVATE taglib)
 target_include_directories(ncmdump PRIVATE taglib/taglib)

@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 #define COMPARE_STR(s1, s2) (strcmp(s1, s2) == 0)
 #define HELP_SHORT "-h"
 #define HELP_LONG "--help"
-#define FOLDER "-d"
+#define PROCESS_FOLDER "-d"
     for (int i = 1; i < argc; ++i)
     {
         if (COMPARE_STR(argv[i], HELP_SHORT) || COMPARE_STR(argv[i], HELP_LONG))
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
             displayHelp();
             return 0;
         }
-        else if (COMPARE_STR(argv[i], FOLDER))
+        else if (COMPARE_STR(argv[i], PROCESS_FOLDER))
         {
             processFolders = true;
             if (i + 1 < argc && argv[i + 1][0] != '-')
