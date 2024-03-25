@@ -35,7 +35,6 @@ if(WIN32)
     ${LIBRARY_SOURCES}
   )
 
-  set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
   set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "libncmdump")
 
   target_include_directories(ncmdump_lib PRIVATE src/include)
@@ -60,6 +59,7 @@ else()
 endif()
 
 # all executable target
+set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
 target_include_directories(ncmdump_exec PRIVATE src/include)
 
 target_link_libraries(ncmdump_exec tag)
