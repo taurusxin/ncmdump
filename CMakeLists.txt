@@ -36,10 +36,7 @@ if(WIN32)
   )
 
   set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
-  set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "ncmdump")
-
-  # Prefix shared libraries with 'lib'.
-  set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
+  set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "libncmdump")
 
   target_include_directories(ncmdump_lib PRIVATE src/include)
 
