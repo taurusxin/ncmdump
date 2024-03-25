@@ -1,10 +1,4 @@
-#include "ncmcrypt.h"
-
-#ifdef _WIN32
-#define API __declspec(dllexport)
-#else
-#define API
-#endif
+#include "libncmdump.h"
 
 extern "C" {
 	API NeteaseCrypt* CreateNeteaseCrypt(const char* path) {

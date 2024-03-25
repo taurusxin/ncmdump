@@ -21,30 +21,36 @@ FILE(GLOB LIBRARY_SOURCES ./src/lib/libncmdump.cpp)
 FILE(GLOB WIN_EXEC_SOURCES ./src/platform/win32_init.cpp)
 
 if(WIN32)
-  add_executable(ncmdump
+  add_executable(ncmdump_exec
     ${HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
     ${WIN_EXEC_SOURCES}
   )
-  add_library(libncmdump SHARED
+  add_library(ncmdump_lib SHARED
     ${HEADERS}
     ${COMMON_SOURCES}
     ${LIBRARY_SOURCES}
   )
 
-  target_include_directories(libncmdump PRIVATE src/include)
+  set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
+  set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "ncmdump")
 
-  target_link_libraries(libncmdump tag)
-  target_include_directories(libncmdump PRIVATE taglib)
-  target_include_directories(libncmdump PRIVATE taglib/taglib)
-  target_include_directories(libncmdump PRIVATE taglib/taglib/toolkit)
-  target_include_directories(libncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+  # Prefix all shared libraries with 'lib'.
+  set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
+
+  target_include_directories(ncmdump_lib PRIVATE src/include)
+
+  target_link_libraries(ncmdump_lib tag)
+  target_include_directories(ncmdump_lib PRIVATE taglib)
+  target_include_directories(ncmdump_lib PRIVATE taglib/taglib)
+  target_include_directories(ncmdump_lib PRIVATE taglib/taglib/toolkit)
+  target_include_directories(ncmdump_lib PRIVATE taglib/taglib/mpeg/id3v2)
 
   if(CMAKE_COMPILER_IS_GNUCXX)
     # static link when using MinGW
-    target_link_options(ncmdump PRIVATE -static)
-    target_link_options(libncmdump PRIVATE -static)
+    target_link_options(ncmdump_exec PRIVATE -static)
+    target_link_options(ncmdump_lib PRIVATE -static)
   endif()
 else()
   add_executable(ncmdump
@@ -55,16 +61,16 @@ else()
 endif()
 
 # executable target
-target_include_directories(ncmdump PRIVATE src/include)
+target_include_directories(ncmdump_exec PRIVATE src/include)
 
-target_link_libraries(ncmdump tag)
-target_include_directories(ncmdump PRIVATE taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib)
-target_include_directories(ncmdump PRIVATE taglib/taglib/toolkit)
-target_include_directories(ncmdump PRIVATE taglib/taglib/mpeg/id3v2)
+target_link_libraries(ncmdump_exec tag)
+target_include_directories(ncmdump_exec PRIVATE taglib)
+target_include_directories(ncmdump_exec PRIVATE taglib/taglib)
+target_include_directories(ncmdump_exec PRIVATE taglib/taglib/toolkit)
+target_include_directories(ncmdump_exec PRIVATE taglib/taglib/mpeg/id3v2)
 
 include(GNUInstallDirs)
-install(TARGETS ncmdump
+install(TARGETS ncmdump_exec ncmdump_lib
   BUNDLE DESTINATION .
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
