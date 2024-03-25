@@ -53,7 +53,7 @@ if(WIN32)
     target_link_options(ncmdump_lib PRIVATE -static)
   endif()
 else()
-  add_executable(ncmdump
+  add_executable(ncmdump_exec
     ${HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
