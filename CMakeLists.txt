@@ -14,29 +14,31 @@ if(MSVC)
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>")
 endif()
 
-FILE(GLOB HEADERS ./src/include/*.h)
-FILE(GLOB COMMON_SOURCES ./src/ncmcrypt.cpp ./src/utils/*.cpp)
-FILE(GLOB EXECUTABLE_SOURCES ./src/main.cpp)
-FILE(GLOB LIBRARY_SOURCES ./src/lib/libncmdump.cpp)
-FILE(GLOB WIN_EXEC_SOURCES ./src/platform/win32_init.cpp)
+FILE(GLOB COMMON_HEADERS src/include/*.h)
+FILE(GLOB COMMON_SOURCES src/ncmcrypt.cpp src/utils/*.cpp)
+FILE(GLOB EXECUTABLE_SOURCES src/main.cpp)
+FILE(GLOB LIBRARY_HEADERS src/lib/libncmdump.h)
+FILE(GLOB LIBRARY_SOURCES src/lib/*.cpp)
+FILE(GLOB WIN_EXEC_SOURCES src/platform/win32_init.cpp)
 
 if(WIN32)
   add_executable(ncmdump_exec
-    ${HEADERS}
+    ${COMMON_HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
     ${WIN_EXEC_SOURCES}
   )
   add_library(ncmdump_lib SHARED
-    ${HEADERS}
+    ${COMMON_HEADERS}
     ${COMMON_SOURCES}
+    ${LIBRARY_HEADERS}
     ${LIBRARY_SOURCES}
   )
 
   set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
   set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "ncmdump")
 
-  # Prefix all shared libraries with 'lib'.
+  # Prefix shared libraries with 'lib'.
   set(CMAKE_SHARED_LIBRARY_PREFIX "lib")
 
   target_include_directories(ncmdump_lib PRIVATE src/include)
@@ -54,13 +56,13 @@ if(WIN32)
   endif()
 else()
   add_executable(ncmdump_exec
-    ${HEADERS}
+    ${COMMON_HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
   )
 endif()
 
-# executable target
+# all executable target
 target_include_directories(ncmdump_exec PRIVATE src/include)
 
 target_link_libraries(ncmdump_exec tag)
@@ -70,8 +72,17 @@ target_include_directories(ncmdump_exec PRIVATE taglib/taglib/toolkit)
 target_include_directories(ncmdump_exec PRIVATE taglib/taglib/mpeg/id3v2)
 
 include(GNUInstallDirs)
-install(TARGETS ncmdump_exec ncmdump_lib
-  BUNDLE DESTINATION .
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+
+if(WIN32)
+  install(TARGETS ncmdump_exec ncmdump_lib
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+else()
+  install(TARGETS ncmdump_exec
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+endif()
