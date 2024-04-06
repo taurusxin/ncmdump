@@ -30,7 +30,13 @@ namespace libncmdump_demo_cli
         /// <param name="FileName">网易云音乐 ncm 加密文件路径</param>
         public NeteaseCrypt(string FileName)
         {
-            NeteaseCryptClass = CreateNeteaseCrypt(Marshal.StringToHGlobalAnsi(FileName));
+            byte[] bytes = Encoding.UTF8.GetBytes(FileName);
+
+            IntPtr inputPtr = Marshal.AllocHGlobal(bytes.Length + 1);
+            Marshal.Copy(bytes, 0, inputPtr, bytes.Length);
+            Marshal.WriteByte(inputPtr, bytes.Length, 0);
+
+            NeteaseCryptClass = CreateNeteaseCrypt(inputPtr);
         }
 
         /// <summary>
