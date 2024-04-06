@@ -1,27 +1,31 @@
 #include "libncmdump.h"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 extern "C" {
-	API NeteaseCrypt* CreateNeteaseCrypt(const char* path) {
-		return new NeteaseCrypt(std::string(path));
-	}
+    API NeteaseCrypt* CreateNeteaseCrypt(const char* path) {
+        fs::path fPath = fs::u8path(path);
+        return new NeteaseCrypt(fPath.u8string());
+    }
 
-	API int Dump(NeteaseCrypt* neteaseCrypt) {
-		try
-		{
-			neteaseCrypt->Dump();
-		}
-		catch (const std::invalid_argument& e)
-		{
-			return 1;
-		}
-		return 0;
-	}
+    API int Dump(NeteaseCrypt* neteaseCrypt) {
+        try
+        {
+            neteaseCrypt->Dump();
+        }
+        catch (const std::invalid_argument& e)
+        {
+            return 1;
+        }
+        return 0;
+    }
 
-	API void FixMetadata(NeteaseCrypt* neteaseCrypt) {
-		neteaseCrypt->FixMetadata();
-	}
+    API void FixMetadata(NeteaseCrypt* neteaseCrypt) {
+        neteaseCrypt->FixMetadata();
+    }
 
-	API void DestroyNeteaseCrypt(NeteaseCrypt* neteaseCrypt) {
-		delete neteaseCrypt;
-	}
+    API void DestroyNeteaseCrypt(NeteaseCrypt* neteaseCrypt) {
+        delete neteaseCrypt;
+    }
 }

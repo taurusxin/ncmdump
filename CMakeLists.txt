@@ -19,20 +19,21 @@ FILE(GLOB COMMON_SOURCES src/ncmcrypt.cpp src/utils/*.cpp)
 FILE(GLOB EXECUTABLE_SOURCES src/main.cpp)
 FILE(GLOB LIBRARY_HEADERS src/lib/libncmdump.h)
 FILE(GLOB LIBRARY_SOURCES src/lib/*.cpp)
-FILE(GLOB WIN_EXEC_SOURCES src/platform/win32_init.cpp)
+FILE(GLOB WIN_SOURCES src/platform/win32_init.cpp)
 
 if(WIN32)
   add_executable(ncmdump_exec
     ${COMMON_HEADERS}
     ${COMMON_SOURCES}
     ${EXECUTABLE_SOURCES}
-    ${WIN_EXEC_SOURCES}
+    ${WIN_SOURCES}
   )
   add_library(ncmdump_lib SHARED
     ${COMMON_HEADERS}
     ${COMMON_SOURCES}
     ${LIBRARY_HEADERS}
     ${LIBRARY_SOURCES}
+    ${WIN_SOURCES}
   )
 
   set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "libncmdump")
