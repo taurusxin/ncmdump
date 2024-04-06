@@ -16,7 +16,9 @@
 
 ## 使用
 
-你可以使用 Homebrew 来安装 ncmdump
+### 命令行工具
+
+你可以使用 Homebrew 来安装 ncmdump 的 cli 版本
 
 ```shell
 brew install ncmdump
@@ -41,6 +43,12 @@ ncmdump file1 file2...
 ```shell
 ncmdump -d folder
 ```
+
+### 动态库
+
+或者，如果你想利用此项目进行二次开发，例如在你的 C#、Python、Java 等项目中调用，你可以使用 `libncmdump` 动态库，具体使用方法见仓库的 `example` 文件夹
+
+请注意！如果你在 Windows 下开发，传递到库构造函数的文件名编码**必须为 UTF-8 编码**，否则会抛出运行时错误。
 
 ## 编译项目
 
