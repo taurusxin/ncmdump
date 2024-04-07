@@ -91,7 +91,7 @@ int main(int argc, char **argv)
             if (i + 1 < argc && argv[i + 1][0] != '-')
             {
                 folderProvided = true;
-                processFilesInFolder(argv[i + 1]);
+                processFilesInFolder(fs::u8path(argv[i + 1]));
                 // Skip the folder name
                 ++i;
             }
