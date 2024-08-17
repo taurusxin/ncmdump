@@ -1,31 +1,36 @@
 ---
-name: Bug report
-about: Create a bug report to help us improve
-title: "[Bug] Summarize the bug here"
+name: 报告 Bug
+about: 创建一个 Bug 报告
+title: "[Bug] 总结你的 Bug 报告"
 labels: bug
 assignees: taurusxin
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Bug 描述**
+清晰地描述一下 Bug 的大致问题。
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**复现方法**
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+复现此 Bug 的方法
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1. 打开 '...'
+2. 点击 '....'
+3. 发生报错
 
-**Desktop (please complete the following information):**
- - OS: [e.g. Windows 11]
+**预期行为**
 
+解释一下原本应该出现的结果。
 
-**Additional context**
-Add any other context about the problem here.
+**屏幕截图**
+
+如果可以，屏幕截图可以更好地阐述你的问题。
+
+**环境**
+
+- OS: [e.g. Windows 11]
+- 软件版本: [e.g. 1.3.2]
+
+**附加内容**
+
+添加更多其他内容以帮助开发者更好地了解这个 Bug。
