@@ -4,7 +4,6 @@ about: 创建一个 Bug 报告，不按照模板的 Issue 会被关闭。
 title: "[Bug] 总结你的 Bug 报告"
 labels: bug
 assignees: taurusxin
-
 ---
 
 **Bug 描述**
