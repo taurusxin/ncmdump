@@ -403,10 +403,8 @@ NeteaseCrypt::NeteaseCrypt(std::string const &path)
 
     if (n > 0)
     {
-        char *imageData = (char *)malloc(n);
-        read(imageData, n);
-
-        mImageData = std::string(imageData, n);
+        mImageData = std::string(n, '\0');
+        read(&mImageData[0], n);
     }
     else
     {
