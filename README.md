@@ -20,7 +20,7 @@
 
 **[不推荐]** 你可以使用 Homebrew 来安装 Linux 或者 macOS 下的 ncmdump
 
-注意：由于本项目的一个依赖库 taglib 的 2.0 版本迟迟未发布到 homebrew-core（由于 taglib 2.0 衍生出的其它 brew 包的版本兼容问题），导致现在使用的 cmake 构建链无法在 macOS 上构建，因为 taglib 从 2.0 开始才支持 cmake 工具链。因此 ncmdump 在 homebrew 上只能发布到 `1.2.1` 版本，更推荐使用二进制的方式直接安装，`1.3` 版本后修复了众多 bug。
+注意：由于本项目依赖的库 taglib 的 2.0 版本尚未发布到 homebrew-core（主要是因为 taglib 2.0 导致其他 brew 包存在版本兼容问题），目前的 cmake 构建链无法在 macOS 上正常使用。根据 brew 的要求，如果依赖库已有官方的 brew 包，构建时必须使用官方仓库中的包，不能从 git 获取。而 taglib 2.0 版本开始才支持 cmake 构建。因此，ncmdump 在 homebrew 上只能发布到 `1.2.1` 版本。建议直接通过二进制方式安装，`1.3.0` 后版本修复了许多 bug，使用体验会更好。
 
 ```shell
 brew install ncmdump
