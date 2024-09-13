@@ -2,6 +2,7 @@
 #include "aes.h"
 #include "base64.h"
 #include "cJSON.h"
+#include "color.h"
 
 #define TAGLIB_STATIC
 #include "taglib/toolkit/tfile.h"
@@ -358,7 +359,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const &path)
 
     if (n <= 0)
     {
-        std::cout << "[Warn] " << path << " missing metadata infomation can't fix some infomation!" << std::endl;
+        std::cout << BOLDYELLOW << "[Warn] " << RESET << "'" << path << "' missing metadata infomation can't fix some infomation!" << std::endl;
 
         mMetaData = NULL;
     }
@@ -408,7 +409,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const &path)
     }
     else
     {
-        std::cout << "[Warn] " << path << " missing album can't fix album image!" << std::endl;
+        std::cout << BOLDYELLOW << "[Warn] " << RESET << "'" << path << "' missing album can't fix album image!" << std::endl;
     }
     mFile.seekg(cover_frame_len - n, mFile.cur);
 }

@@ -35,7 +35,7 @@ void processFile(const fs::path &filePath)
         crypt.Dump();
         crypt.FixMetadata();
 
-        std::cout << BOLDGREEN << "Done: " << RESET << "'" << crypt.dumpFilepath().u8string() << "'" << std::endl;
+        std::cout << BOLDGREEN << "[Done] " << RESET << "'" << filePath.u8string() << "' -> '" << crypt.dumpFilepath().u8string() << "'" << std::endl;
     }
     catch (const std::invalid_argument &e)
     {
