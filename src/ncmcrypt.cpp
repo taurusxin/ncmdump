@@ -391,23 +391,24 @@ NeteaseCrypt::NeteaseCrypt(std::string const &path)
         mMetaData = new NeteaseMusicMetadata(cJSON_Parse(modifyDecryptData.c_str()));
     }
 
-    // skip crc32 & unuse charset
-    if (!mFile.seekg(9, mFile.cur))
+    // skip crc32 & image version
+    if (!mFile.seekg(5, mFile.cur))
     {
         throw std::invalid_argument("can't seek file");
     }
 
+    uint32_t cover_frame_len{0};
+    read(reinterpret_cast<char *>(&cover_frame_len), 4);
     read(reinterpret_cast<char *>(&n), sizeof(n));
 
     if (n > 0)
     {
-        char *imageData = (char *)malloc(n);
-        read(imageData, n);
-
-        mImageData = std::string(imageData, n);
+        mImageData = std::string(n, '\0');
+        read(&mImageData[0], n);
     }
     else
     {
         std::cout << "[Warn] " << path << " missing album can't fix album image!" << std::endl;
     }
+    mFile.seekg(cover_frame_len - n, mFile.cur);
 }
