@@ -35,7 +35,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Windows amd64 Build - MinGW
+        name: windows_amd64_build_msys2_exe
         path: ${{ env.BUILD_PATH }}/ncmdump.exe
 
   build_on_windows_msvc:
@@ -56,13 +56,13 @@ jobs:
     - name: Upload artifact executable
       uses: actions/upload-artifact@v4
       with:
-        name: Windows amd64 Build - MSVC
+        name: windows_amd64_build_msvc_exe
         path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/ncmdump.exe
     
     - name: Upload artifact DLL
       uses: actions/upload-artifact@v4
       with:
-        name: Windows amd64 Build - MSVC DLL
+        name: windows_amd64_build_msvc_dll
         path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/libncmdump.dll
   
   build_on_linux:
@@ -88,10 +88,10 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: Linux amd64 Build
+        name: linux_build_amd64
         path: ${{ env.BUILD_PATH }}/ncmdump
 
-  build_on_macos:
+  build_on_macos_amd64:
     runs-on: macos-latest
 
     steps:
@@ -105,7 +105,7 @@ jobs:
         brew install git cmake
 
     - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }} -DCMAKE_OSX_ARCHITECTURES=x86_64
 
     - name: Build
       run: cmake --build ${{ env.BUILD_PATH }} -j 4
@@ -113,5 +113,30 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: macOS amd64 Build
+        name: macOS_build_amd64
+        path: ${{ env.BUILD_PATH }}/ncmdump
+
+  build_on_macos_arm64:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: |
+        brew install git cmake
+
+    - name: Configure build
+      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }} -DCMAKE_OSX_ARCHITECTURES=arm64
+
+    - name: Build
+      run: cmake --build ${{ env.BUILD_PATH }} -j 4
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macOS_build_arm64
         path: ${{ env.BUILD_PATH }}/ncmdump
