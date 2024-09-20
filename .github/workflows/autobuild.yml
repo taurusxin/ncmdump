@@ -65,7 +65,7 @@ jobs:
         name: windows_amd64_build_msvc_dll
         path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/libncmdump.dll
   
-  build_on_linux:
+  build_on_linux_amd64:
     runs-on: ubuntu-latest
 
     steps:
