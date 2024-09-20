@@ -78,6 +78,10 @@ cmake -G "Visual Studio 17 2022" -A x64 -B build
 
 # Linux / macOS
 cmake -DCMAKE_BUILD_TYPE=Release -B build
+
+# 如果需要在 macOS 下交叉编译，可以指定 `CMAKE_OSX_ARCHITECTURES` 变量来指明目标系统架构
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 -B build  # arm64
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 -B build  # Intel-based
 ```
 
 编译项目
