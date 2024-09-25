@@ -24,7 +24,7 @@ void processFile(const fs::path &filePath, const fs::path &outputFolder)
     }
 
     // skip if not ending with ".ncm"
-    if (!filePath.has_extension() || filePath.extension().u8string()!= ".ncm")
+    if (!filePath.has_extension() || filePath.extension().u8string() != ".ncm")
     {
         return;
     }
@@ -65,8 +65,23 @@ int main(int argc, char **argv)
 
     options.parse_positional({"filenames"});
 
+    options.allow_unrecognised_options();
+
     // Parse options the usual way
-    auto result = options.parse(argc, argv);
+    cxxopts::ParseResult result;
+    try {
+        result = options.parse(argc, argv);
+    } catch(cxxopts::exceptions::parsing const& e) {
+        std::cout << options.help() << std::endl;
+        return 1;
+    }
+
+    // print usage message if unrecognised options are present
+    if (result.unmatched().size() > 0)
+    {
+        std::cout << options.help() << std::endl;
+        return 1;
+    }
 
     // display help message
     if (result.count("help"))
