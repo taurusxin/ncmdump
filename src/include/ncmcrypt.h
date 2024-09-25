@@ -66,6 +66,6 @@ public:
 	~NeteaseCrypt();
 
 public:
-	void Dump();
+	void Dump(std::string const&);
 	void FixMetadata();
 };

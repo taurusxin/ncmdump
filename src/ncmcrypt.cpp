@@ -16,6 +16,9 @@
 #include <string>
 #include <filesystem>
 
+#pragma warning(disable:4267)
+#pragma warning(disable:4244)
+
 const unsigned char NeteaseCrypt::sCoreKey[17] = {0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0};
 const unsigned char NeteaseCrypt::sModifyKey[17] = {0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0};
 
@@ -260,9 +263,14 @@ void NeteaseCrypt::FixMetadata()
     audioFile->~File();
 }
 
-void NeteaseCrypt::Dump()
+void NeteaseCrypt::Dump(std::string const &outputDir = "")
 {
-    mDumpFilepath = std::filesystem::u8path(mFilepath);
+    if (outputDir.empty())
+    {
+        mDumpFilepath = std::filesystem::u8path(mFilepath);
+    } else {
+        mDumpFilepath = std::filesystem::u8path(outputDir) / std::filesystem::u8path(mFilepath).filename();
+    }
 
     std::vector<unsigned char> buffer(0x8000);
 

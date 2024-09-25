@@ -14,7 +14,7 @@ namespace libncmdump_demo_cli
             NeteaseCrypt neteaseCrypt = new NeteaseCrypt(filePath);
 
             // 启动转换过程
-            int result = neteaseCrypt.Dump();
+            int result = neteaseCrypt.Dump("");  // 为空则输出到源
 
             // 修复元数据
             neteaseCrypt.FixMetadata();

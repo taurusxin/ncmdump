@@ -8,7 +8,7 @@
 
 extern "C" {
     API NeteaseCrypt* CreateNeteaseCrypt(const char* path);
-    API int Dump(NeteaseCrypt* neteaseCrypt);
+    API int Dump(NeteaseCrypt* neteaseCrypt, const char* outputPath);
     API void FixMetadata(NeteaseCrypt* neteaseCrypt);
     API void DestroyNeteaseCrypt(NeteaseCrypt* neteaseCrypt);
 }

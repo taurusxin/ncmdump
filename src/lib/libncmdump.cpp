@@ -9,10 +9,10 @@ extern "C" {
         return new NeteaseCrypt(fPath.u8string());
     }
 
-    API int Dump(NeteaseCrypt* neteaseCrypt) {
+    API int Dump(NeteaseCrypt* neteaseCrypt, const char* outputPath) {
         try
         {
-            neteaseCrypt->Dump();
+            neteaseCrypt->Dump(outputPath);
         }
         catch (const std::invalid_argument& e)
         {
