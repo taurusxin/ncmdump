@@ -63,6 +63,8 @@ int main(int argc, char **argv)
     ("v,version", "Print version information", cxxopts::value<bool>()->default_value("false"))
     ("filenames", "Input files", cxxopts::value<std::vector<std::string>>());
 
+    options.positional_help("<files>");
+
     options.parse_positional({"filenames"});
 
     options.allow_unrecognised_options();
