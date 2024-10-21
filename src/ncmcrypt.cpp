@@ -257,7 +257,7 @@ void NeteaseCrypt::FixMetadata()
         tag->setAlbum(TagLib::String(mMetaData->album(), TagLib::String::UTF8));
     }
 
-    tag->setComment(TagLib::String("Create by taurusxin/ncmdump.", TagLib::String::UTF8));
+    // tag->setComment(TagLib::String("Create by taurusxin/ncmdump.", TagLib::String::UTF8));
 
     audioFile->save();
     audioFile->~File();
