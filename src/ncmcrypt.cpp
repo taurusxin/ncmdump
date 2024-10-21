@@ -224,7 +224,7 @@ void NeteaseCrypt::FixMetadata()
         audioFile = new TagLib::MPEG::File(mDumpFilepath.c_str());
         tag = dynamic_cast<TagLib::MPEG::File *>(audioFile)->ID3v2Tag(true);
 
-        if (mImageData.length() > 0)
+        if (!mImageData.empty())
         {
             TagLib::ID3v2::AttachedPictureFrame *frame = new TagLib::ID3v2::AttachedPictureFrame;
 
@@ -239,7 +239,7 @@ void NeteaseCrypt::FixMetadata()
         audioFile = new TagLib::FLAC::File(mDumpFilepath.c_str());
         tag = audioFile->tag();
 
-        if (mImageData.length() > 0)
+        if (!mImageData.empty())
         {
             TagLib::FLAC::Picture *cover = new TagLib::FLAC::Picture;
             cover->setMimeType(mimeType(mImageData));
@@ -301,7 +301,7 @@ void NeteaseCrypt::Dump(std::string const &outputDir = "")
                 mFormat = NeteaseCrypt::FLAC;
             }
 
-            output.open(mDumpFilepath, output.out | output.binary);
+            output.open(mDumpFilepath, std::ofstream::out | std::ofstream::binary);
         }
 
         output.write((char *)buffer.data(), n);

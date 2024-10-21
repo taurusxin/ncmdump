@@ -47,7 +47,7 @@ private:
 	NcmFormat mFormat;
 	std::string mImageData;
 	std::ifstream mFile;
-	unsigned char mKeyBox[256];
+	unsigned char mKeyBox[256]{};
 	NeteaseMusicMetadata* mMetaData;
 
 private:
