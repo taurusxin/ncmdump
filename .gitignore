@@ -5,3 +5,5 @@ ncmdump
 .idea
 
 build
+
+cmake-build-*
