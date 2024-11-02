@@ -1,6 +1,6 @@
 name: CI
 env:
-  BUILD_TYPE: Release
+  BUILD_TYPE: MinSizeRel
   BUILD_PATH: build
 on:
   push:
