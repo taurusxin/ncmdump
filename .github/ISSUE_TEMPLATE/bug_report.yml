@@ -1,0 +1,101 @@
+name: 报告 Bug
+description: 创建一个 Bug 报告。
+title: "[Bug]: "
+labels: "bug"
+assignees:
+  - taurusxin
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # taurusxin/ncmdump Bug 反馈须知
+        请__严格遵守该模板进行 Bug 反馈__，否则维护者有权直接关闭本 Issue 不予回复！
+        为了保证 Bug 追踪的顺利，请__务必提供详细信息，并接受来自维护者的提问__！
+
+  - type: checkboxes
+    attributes:
+      label: 该 Bug 是否针对 `libncmdump`？
+      description: 如果是命令行工具 `ncmdump` 请不要勾选。
+      options:
+      - label: 是的，此 Bug 是针对动态库 `libncmdump` 而不是命令行工具 `ncmdump`! 
+
+  - type: dropdown
+    attributes:
+      label: 类型
+      options:
+        - 无法转换文件
+        - 转换成功但音频文件无法播放
+        - 功能失效
+        - 程序崩溃
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Bug 描述
+      description: 清晰地描述一下 Bug 的大致问题及表现，对上面的类型进行补充说明。
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 复现方法
+      description: 复现此 Bug 的方法。
+      placeholder: |
+        1. 使用本项目处理文件 '...'
+        2. 发生报错
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 屏幕截图或视频
+      description: 如果可以，屏幕截图可以更好地阐述你的问题。
+      placeholder: 将截图或视频文件拖入此处
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: 操作系统
+      description: 请提供您当前正在使用的操作系统，如果可以，请提供更多关于操作系统的版本信息，Linux 请提供发行版名称。
+      placeholder: 如：Windows / macOS / Debian
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: ncmdump 版本
+      description: 请提供您正在使用的 ncmdump 版本，如果是来自 Github Actions 的构建，请提供 commit 信息。
+      placeholder: 如：1.5.0
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 网易云版本（重要）
+      description: 请提供您下载 ncm 文件的网易云客户端及版本，请写明客户端平台与版本号。
+      placeholder: 如：Windows 版 3.0.1
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: 所下载的音质
+      options:
+        - 标准
+        - 极高
+        - 无损
+        - 高清臻音
+        - 超清母带
+        - 沉浸环绕声
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 附加内容
+      placeholder: 如果遇到无法转换的问题，请将样本附加到这里，便于分析。
+    validations:
+      required: false
