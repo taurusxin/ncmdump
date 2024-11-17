@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: 寻求帮助
+      url: https://github.com/taurusxin/ncmdump/discussions/categories/q-a
+      about: 有疑问？请转移到讨论的 Q&A 分区！
+    - name: 意见与新功能请求
+      url: https://github.com/taurusxin/ncmdump/discussions/categories/ideas
+      about: 需要什么新功能？请到讨论的 Ideas 分区！
