@@ -16,7 +16,7 @@
 
 ## 使用
 
-注意：自网易云音乐 3.0 版本开始，下载的 ncm 文件均不内置歌曲专辑的封面图片，需要从网络获取，介于在一个小工具中嵌入庞大网络库的非必要性，可以移步我的另一个仓库（<https://git.taurusxin.com/taurusxin/ncmdump-go>），下载完全使用 Golang 重写的新版本，支持从网络自动获取封面图并嵌入到目标音乐文件。
+注意：网易云音乐 3.0 之后的某些版本，下载的 ncm 文件会出现不内置歌曲专辑的封面图片，需要从网络获取，介于在一个小工具中嵌入庞大网络库的非必要性，可以移步我的另一个仓库（<https://git.taurusxin.com/taurusxin/ncmdump-go>）或者使用基于此项目开发的 GUI 程序（<https://git.taurusxin.com/taurusxin/ncmdump-gui>），下载完全使用 Golang 重写的新版本，支持从网络自动获取封面图并嵌入到目标音乐文件。
 
 ### 命令行工具
 
