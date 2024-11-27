@@ -6,9 +6,11 @@
 
 该版本为最早的 C++ 版本，也是作者开发的市面上第一个支持 ncm 转换的程序
 
-源码复刻自 anonymous5l/ncmdump，感谢前辈的付出！做了 Windows 下的移植，修复了一些编译问题
+源码复刻自 anonymous5l/ncmdump (2021年10月6日，原作者已经删库)
 
-1.3.0 版本更新说明：因为之前有小伙伴反馈无法解密带有特殊字符的文件名，例如中文、日文、韩文或者是表情符号等，在1.3.0以及之后的版本彻底修复了这个问题，所有的 UTF-8 字符都可以正常解密。并且还自带了 dll 的构建，可以供其他应用程序（C#、Python、Java等）调用。
+感谢前辈的付出！此版本做了全操作系统下的的跨平台编译移植，修复了一些内存溢出的问题。
+
+1.3.0 版本更新说明：因为之前有较多 Issue 反馈无法解密带有特殊字符的文件名，例如中文、日文、韩文或者是表情符号等，在1.3.0以及之后的版本彻底修复了这个问题，所有的 UTF-8 字符都可以正常解密。并且还自带了 dll 的构建，可以供其他应用程序（C#、Python、Java等）调用。
 
 ## 传送门
 
@@ -16,19 +18,13 @@
 
 ## 使用
 
-注意：网易云音乐 3.0 之后的某些版本，下载的 ncm 文件会出现不内置歌曲专辑的封面图片，需要从网络获取，介于在一个小工具中嵌入庞大网络库的非必要性，可以移步我的另一个仓库（<https://git.taurusxin.com/taurusxin/ncmdump-go>）或者使用基于此项目开发的 GUI 程序（<https://git.taurusxin.com/taurusxin/ncmdump-gui>），下载完全使用 Golang 重写的新版本，支持从网络自动获取封面图并嵌入到目标音乐文件。
+注意：网易云音乐 3.0 之后的某些版本，下载的 ncm 文件会出现不内置歌曲专辑的封面图片的情况，所需的封面图数据需要从网络获取，介于在一个小工具中嵌入庞大网络库的非必要性，可以移步我的另一个仓库 [ncmdump
+-go](https://git.taurusxin.com/taurusxin/ncmdump-go) 或者使用基于此项目开发的可视化 GUI 程序 [ncmdump
+-gui](https://git.taurusxin.com/taurusxin/ncmdump-gui)，其中后者基于前者，均完全使用 Golang 重写，并支持自动从元数据读取封面信息后从网络获取封面图并嵌入到目标音乐文件。
 
 ### 命令行工具
 
-**[不推荐]** 你可以使用 Homebrew 来安装 Linux 或者 macOS 下的 ncmdump
-
-注意：由于本项目依赖的库 taglib 的 2.0 版本尚未发布到 homebrew-core（主要是因为 taglib 2.0 导致其他 brew 包存在版本兼容问题），目前的 cmake 构建链无法在 macOS 上正常使用。根据 brew 的要求，如果依赖库已有官方的 brew 包，构建时必须使用官方仓库中的包，不能从 git 获取。而 taglib 2.0 版本开始才支持 cmake 构建。因此，ncmdump 在 homebrew 上只能发布到 `1.2.1` 版本。建议直接通过二进制方式安装，`1.3.0` 后版本修复了许多 bug，使用体验会更好。
-
-```shell
-brew install ncmdump
-```
-
-或者从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
+从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
 
 使用 `-h` 或 `--help` 参数来打印帮助
 
