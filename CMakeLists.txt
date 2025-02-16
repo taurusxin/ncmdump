@@ -52,6 +52,7 @@ if(WIN32)
     target_link_options(ncmdump_lib PRIVATE -static)
   endif()
 else()
+  set(CMAKE_CXX_FLAGS -pthread)
   add_executable(ncmdump_exec
     ${COMMON_HEADERS}
     ${COMMON_SOURCES}

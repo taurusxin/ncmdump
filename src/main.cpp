@@ -12,39 +12,46 @@
 #include "color.h"
 #include "version.h"
 #include "cxxopts.hpp"
+#include "thread_pool.hpp"
 
 namespace fs = std::filesystem;
 
+cxxpool::ThreadPool thread_pool;
+
 void processFile(const fs::path &filePath, const fs::path &outputFolder)
 {
-    if (fs::exists(filePath) == false)
-    {
-        std::cerr << BOLDRED << "[Error] " << RESET << "file '" << filePath.u8string() << "' does not exist." << std::endl;
-        return;
-    }
+    auto work_func = [](fs::path filePath, fs::path outputFolder) {
+        if (fs::exists(filePath) == false)
+        {
+            std::cerr << BOLDRED << "[Error] " << RESET << "file '" << filePath.u8string() << "' does not exist." << std::endl;
+            return;
+        }
 
-    // skip if not ending with ".ncm"
-    if (!filePath.has_extension() || filePath.extension().u8string() != ".ncm")
-    {
-        return;
-    }
+        // skip if not ending with ".ncm"
+        if (!filePath.has_extension() || filePath.extension().u8string() != ".ncm")
+        {
+            return;
+        }
 
-    try
-    {
-        NeteaseCrypt crypt(filePath.u8string());
-        crypt.Dump(outputFolder.u8string());
-        crypt.FixMetadata();
+        try
+        {
+            NeteaseCrypt crypt(filePath.u8string());
+            crypt.Dump(outputFolder.u8string());
+            crypt.FixMetadata();
 
-        std::cout << BOLDGREEN << "[Done] " << RESET << "'" << filePath.u8string() << "' -> '" << crypt.dumpFilepath().u8string() << "'" << std::endl;
-    }
-    catch (const std::invalid_argument &e)
-    {
-        std::cerr << BOLDRED << "[Exception] " << RESET << RED << e.what() << RESET << " '" << filePath.u8string() << "'" << std::endl;
-    }
-    catch (...)
-    {
-        std::cerr << BOLDRED << "[Error] Unexpected exception while processing file: " << RESET << filePath.u8string() << std::endl;
-    }
+            std::cout << BOLDGREEN << "[Done] " << RESET << "'" << filePath.u8string() << "' -> '" << crypt.dumpFilepath().u8string() << "'" << std::endl;
+        }
+        catch (const std::invalid_argument &e)
+        {
+            std::cerr << BOLDRED << "[Exception] " << RESET << RED << e.what() << RESET << " '" << filePath.u8string() << "'" << std::endl;
+        }
+        catch (...)
+        {
+            std::cerr << BOLDRED << "[Error] Unexpected exception while processing file: " << RESET << filePath.u8string() << std::endl;
+        }
+    };
+
+    thread_pool.submit(work_func, filePath, outputFolder);
 }
 
 int main(int argc, char **argv)
