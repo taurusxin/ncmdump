@@ -42,6 +42,21 @@ public:
 
     ~ThreadPool() noexcept
     {
+        if (is_running_)
+            join();
+    }
+
+    template<class Func, class... Args>
+    void submit(Func&& func, Args&&... args)
+    {
+        std::unique_lock<std::mutex> lock(mutex_);
+        queue_.push(std::bind(func, std::forward<Args>(args)...));
+        lock.unlock();
+        cv_.notify_one();
+    }
+
+    void join()
+    {
         is_running_ = false;
         cv_.notify_all();
 
@@ -52,13 +67,9 @@ public:
         }
     }
 
-    template<class Func, class... Args>
-    void submit(Func&& func, Args&&... args)
+    bool joinable()
     {
-        std::unique_lock<std::mutex> lock(mutex_);
-        queue_.push(std::bind(func, std::forward<Args>(args)...));
-        lock.unlock();
-        cv_.notify_one();
+        return is_running_;
     }
 
 private:
