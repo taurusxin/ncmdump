@@ -45,7 +45,7 @@ void processFileTask(fs::path filePath, fs::path outputFolder)
     }
     catch (const std::invalid_argument &e)
     {
-        logger.cerr(BOLDRED, "[Exception] ", RESET, RED, e.what(), RESET, " '", filePath.u8string(), "'");
+        logger.cerr(BOLDRED, "[Exception] ", RESET, RED, std::string(e.what()), RESET, " '", filePath.u8string(), "'");
     }
     catch (...)
     {
@@ -198,6 +198,8 @@ int main(int argc, char **argv)
                 }
             }
         }
+        logger.start();
+        thread_pool.start();
         if (thread_pool.joinable())
             thread_pool.join();
         if (logger.joinable())
@@ -226,6 +228,8 @@ int main(int argc, char **argv)
                 processFile(filePathU8, "");
             }
         }
+        logger.start();
+        thread_pool.start();
         if (thread_pool.joinable())
             thread_pool.join();
         if (logger.joinable())

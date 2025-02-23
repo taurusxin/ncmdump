@@ -17,8 +17,17 @@ class Logger
 {
 public:
     Logger():
-        is_running_(true)
+        is_running_(false) {}
+
+    ~Logger()
     {
+        if (is_running_)
+            join();
+    }
+
+    void start()
+    {
+        is_running_ = true;
         thread_ = std::thread([&]() {
             while (true)
             {
@@ -36,34 +45,28 @@ public:
         });
     }
 
-    ~Logger()
-    {
-        if (is_running_)
-            join();
-    }
-
     template<typename... Args>
-    void cerr(Args... args)
+    void cerr(Args&&... args)
     {
         std::unique_lock<std::mutex> lock(mutex_);
         msg_queue_.push(std::bind([](auto... args) {
             std::cerr << generateTimeFormatString();
             ((std::cerr << args), ...);
             std::cerr << std::endl;
-            }, std::move(args)...));
+            }, std::forward<Args>(args)...));
         lock.unlock();
         cv_.notify_all();
     }
 
     template<typename... Args>
-    void cout(Args... args)
+    void cout(Args&&... args)
     {
         std::unique_lock<std::mutex> lock(mutex_);
         msg_queue_.push(std::bind([](auto... args) {
             std::cout << generateTimeFormatString();
             ((std::cout << args), ...);
             std::cout << std::endl;
-            }, std::move(args)...));
+            }, std::forward<Args>(args)...));
         lock.unlock();
         cv_.notify_all();
     }

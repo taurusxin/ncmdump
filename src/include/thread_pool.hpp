@@ -16,8 +16,17 @@ class ThreadPool
 public:
     ThreadPool():
         thread_num_(std::thread::hardware_concurrency() * 2),
-        is_running_(true)
+        is_running_(false) {}
+
+    ~ThreadPool() noexcept
     {
+        if (is_running_)
+            join();
+    }
+
+    void start()
+    {
+        is_running_ = true;
         work_threads_ = std::make_unique<std::thread[]>(thread_num_);
         for (unsigned int i = 0; i < thread_num_; ++i)
         {
@@ -38,12 +47,6 @@ public:
                 }
             });
         }
-    }
-
-    ~ThreadPool() noexcept
-    {
-        if (is_running_)
-            join();
     }
 
     template<class Func, class... Args>
