@@ -18,8 +18,8 @@
 
 namespace fs = std::filesystem;
 
-cxxpool::ThreadPool thread_pool;
-cxxlog::Logger logger;
+static cxxpool::ThreadPool thread_pool;
+static cxxlog::Logger logger;
 
 void processFileTask(fs::path filePath, fs::path outputFolder)
 {

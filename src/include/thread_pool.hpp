@@ -15,7 +15,7 @@ class ThreadPool
 {
 public:
     ThreadPool():
-        thread_num_(std::thread::hardware_concurrency() * 2),
+        thread_num_(std::thread::hardware_concurrency()),
         is_running_(false) {}
 
     ~ThreadPool() noexcept
