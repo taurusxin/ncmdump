@@ -113,8 +113,6 @@ cmake --build build -j 8
 
 你可以在 `build` 文件夹下找到编译好的二进制文件，以及一个可供其它项目使用的动态库(Windows Only)，使用方法见仓库的 `example` 文件夹
 
-[![Powered by DartNode]( https://dartnode.com/branding/DN-Open-Source-sm.png)]( https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
-
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=taurusxin/ncmdump&type=Date)](https://star-history.com/#taurusxin/ncmdump&Date)
