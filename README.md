@@ -1,8 +1,12 @@
-# ncmdump
+# ncmdump-android
 
 使用本程序可将下载的网易云音乐缓存文件（ncm）转换为 mp3 或 flac 格式
 
 ## 简介
+
+本分支是ncmdump在Android平台上的移植，taglib的android调整改自[taglib-ndk](https://github.com/tumugin/taglib-ndk)
+
+下为原简介：
 
 该版本为最早的 C++ 版本，也是作者开发的市面上第一个支持 ncm 转换的程序
 
@@ -18,7 +22,7 @@
 
 ### 命令行工具
 
-从 [Release](https://github.com/taurusxin/ncmdump/releases) 下载最新版本的对应系统的已编译好的二进制文件
+用法与原版相同
 
 使用 `-h` 或 `--help` 参数来打印帮助
 
@@ -65,9 +69,7 @@ ncmdump -d source_dir -o output_dir -r
 
 ### 动态库
 
-或者，如果你想利用此项目进行二次开发，例如在你的 C#、Python、Java 等项目中调用，你可以使用 `libncmdump` 动态库，具体使用方法见仓库的 `example` 文件夹
-
-请注意！如果你在 Windows 下开发，传递到库构造函数的文件名编码**必须为 UTF-8 编码**，否则会抛出运行时错误。
+或者，如果你想利用此项目进行二次开发，例如在你的Android应用中调用，你可以使用 `libncmdump` 动态库，具体使用方法如下
 
 ## 编译项目
 
@@ -84,34 +86,31 @@ cd ncmdump
 git submodule update --init --recursive
 ```
 
-使用 CMake 配置项目。Windows 下若使用 GNU 套件，推荐使用 [msys2](https://www.msys2.org/) 或者 [winlibs](https://winlibs.com/)
+调整CMakeLists.txt
 
-```shell
-# Windows MinGW
-cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+# Android Studio
+置于你项目的cpp文件夹下
 
-# Windows MSVC
-cmake -G "Visual Studio 17 2022" -A x64 -B build
+编译Android项目时自动编译，生成numdump和libncmdump.so
 
-# Linux / macOS
-cmake -DCMAKE_BUILD_TYPE=Release -B build
+# 使用
+```kotlin
+init {
+        System.loadLibrary("ncmdump") // 你的库名
+    }
 
-# 如果需要在 macOS 下交叉编译，可以指定 `CMAKE_OSX_ARCHITECTURES` 变量来指明目标系统架构
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 -B build  # arm64
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 -B build  # Intel-based
+external fun DumpFileTo(inputFilePath: String, outputCachePath: String): Int
 ```
 
-编译项目
+# DumpFileTo用法
+inputFilePath：输入文件路径
+outputCachePath:输出文件路径
+返回：
+-1（失败）
+0（成功）
 
-```shell
-# Windows MSVC 需要在构建阶段指定 --config Release
-cmake --build build -j 8 --config Release
-
-# Windows MinGW / Linux / macOS
-cmake --build build -j 8
-```
-
-你可以在 `build` 文件夹下找到编译好的二进制文件，以及一个可供其它项目使用的动态库(Windows Only)，使用方法见仓库的 `example` 文件夹
+# 注意
+在 Android 11 以上的版本，Android对文件读取和写入有较严格的规定，因此上述目录应为应用私有的目录（比如cache）
 
 ## Star History
 
