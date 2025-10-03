@@ -25,17 +25,15 @@ const unsigned char NeteaseCrypt::mPng[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A,
 
 static void aesEcbDecrypt(const unsigned char *key, std::string &src, std::string &dst)
 {
-    int n, i;
-
     unsigned char out[16];
 
-    n = src.length() >> 4;
+    const int n = src.length() >> 4;
 
     dst.clear();
 
     AES aes(key);
 
-    for (i = 0; i < n - 1; i++)
+    for (int i = 0; i < n - 1; i++)
     {
         aes.decrypt((unsigned char *)src.c_str() + (i << 4), out);
         dst += std::string((char *)out, 16);
@@ -48,18 +46,6 @@ static void aesEcbDecrypt(const unsigned char *key, std::string &src, std::strin
         pad = 0;
     }
     dst += std::string((char *)out, 16 - pad);
-}
-
-static void replace(std::string &str, const std::string &from, const std::string &to)
-{
-    if (from.empty())
-        return;
-    size_t start_pos = 0;
-    while ((start_pos = str.find(from, start_pos)) != std::string::npos)
-    {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-    }
 }
 
 NeteaseMusicMetadata::~NeteaseMusicMetadata()
@@ -240,7 +226,7 @@ void NeteaseCrypt::FixMetadata()
 
         if (!mImageData.empty())
         {
-            TagLib::FLAC::Picture *cover = new TagLib::FLAC::Picture;
+            auto *cover = new TagLib::FLAC::Picture;
             cover->setMimeType(mimeType(mImageData));
             cover->setType(TagLib::FLAC::Picture::FrontCover);
             cover->setData(vector);
@@ -249,7 +235,7 @@ void NeteaseCrypt::FixMetadata()
         }
     }
 
-    if (mMetaData != NULL)
+    if (mMetaData != nullptr)
     {
         tag->setTitle(TagLib::String(mMetaData->name(), TagLib::String::UTF8));
         tag->setArtist(TagLib::String(mMetaData->artist(), TagLib::String::UTF8));
