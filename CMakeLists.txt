@@ -5,10 +5,7 @@ project(ncmdump LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-set(WITH_ZLIB OFF)
-set(BUILD_TESTING OFF)
-add_subdirectory(taglib)
+find_package(TagLib REQUIRED)
 
 if(MSVC)
   add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/execution-charset:utf-8>")
@@ -38,19 +35,8 @@ if(WIN32)
 
   set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "libncmdump")
 
-  target_include_directories(ncmdump_lib PRIVATE src/include)
+  target_link_libraries(ncmdump_lib TagLib::tag)
 
-  target_link_libraries(ncmdump_lib tag)
-  target_include_directories(ncmdump_lib PRIVATE taglib)
-  target_include_directories(ncmdump_lib PRIVATE taglib/taglib)
-  target_include_directories(ncmdump_lib PRIVATE taglib/taglib/toolkit)
-  target_include_directories(ncmdump_lib PRIVATE taglib/taglib/mpeg/id3v2)
-
-  if(CMAKE_COMPILER_IS_GNUCXX)
-    # static link when using MinGW
-    target_link_options(ncmdump_exec PRIVATE -static)
-    target_link_options(ncmdump_lib PRIVATE -static)
-  endif()
 else()
   add_executable(ncmdump_exec
     ${COMMON_HEADERS}
@@ -63,11 +49,7 @@ endif()
 set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
 target_include_directories(ncmdump_exec PRIVATE src/include)
 
-target_link_libraries(ncmdump_exec tag)
-target_include_directories(ncmdump_exec PRIVATE taglib)
-target_include_directories(ncmdump_exec PRIVATE taglib/taglib)
-target_include_directories(ncmdump_exec PRIVATE taglib/taglib/toolkit)
-target_include_directories(ncmdump_exec PRIVATE taglib/taglib/mpeg/id3v2)
+target_link_libraries(ncmdump_exec TagLib::tag)
 
 include(GNUInstallDirs)
 
