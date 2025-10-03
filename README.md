@@ -77,39 +77,48 @@ ncmdump -d source_dir -o output_dir -r
 git clone https://github.com/taurusxin/ncmdump.git
 ```
 
-更新子模块
-
-```shell
-cd ncmdump
-git submodule update --init --recursive
-```
-
 使用 CMake 配置项目。Windows 下若使用 GNU 套件，推荐使用 [msys2](https://www.msys2.org/) 或者 [winlibs](https://winlibs.com/)
 
+注意：从 1.6 版本开始，CMake 构建不再依赖于 gitsubmodule，因此无需再克隆 `taglib` 仓库，改为使用系统的 taglib 库，针对不同系统上的构建，请参照如下方法
+
+### Windows
+
+Windows 下，你可以使用 vcpkg 来安装 taglib 库，或者手动下载 taglib 的源码，并使用 CMake 来构建 taglib 库
+
+vcpkg
+
 ```shell
-# Windows MinGW
-cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -B build
+# 安装 taglib 库
+vcpkg install taglib:x64-windows
 
-# Windows MSVC
-cmake -G "Visual Studio 17 2022" -A x64 -B build
+# 配置项目
+cmake -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\vcpkg.cmake -B build
 
-# Linux / macOS
+# 编译项目
+cmake --build build -j 8 --config Release
+```
+
+手动编译 taglib 的方法参见[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib)，与 vcpkg 类似，只是需要指定 `--prefix` 参数来指定安装路径，然后使用 `cmake --install` 命令来安装 taglib 库，最后在 CMake 中指定 `CMAKE_PREFIX_PATH` 参数来指定 taglib 库的安装路径即可
+
+### macOS / Linux
+
+macOS 下，你可以使用 Homebrew 来安装 taglib 库，Linux 下，你可以使用 apt / pacman 等包管理器来安装 taglib 库
+
+```shell
+# 安装 taglib 库
+# macOS
+brew install taglib
+# Linux (Debian / Ubuntu)
+sudo apt install libtag1-dev
+
+# 配置项目
 cmake -DCMAKE_BUILD_TYPE=Release -B build
 
-# 如果需要在 macOS 下交叉编译，可以指定 `CMAKE_OSX_ARCHITECTURES` 变量来指明目标系统架构
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64 -B build  # arm64
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=x86_64 -B build  # Intel-based
-```
-
-编译项目
-
-```shell
-# Windows MSVC 需要在构建阶段指定 --config Release
-cmake --build build -j 8 --config Release
-
-# Windows MinGW / Linux / macOS
+# 编译项目
 cmake --build build -j 8
 ```
+
+---
 
 你可以在 `build` 文件夹下找到编译好的二进制文件，以及一个可供其它项目使用的动态库(Windows Only)，使用方法见仓库的 `example` 文件夹
 
