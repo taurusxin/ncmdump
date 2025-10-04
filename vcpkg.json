@@ -1,6 +1,7 @@
 {
   "name": "ncmdump",
   "version": "1.6.0",
+  "builtin-baseline": "a62ce77d56ee07513b4b67de1ec2daeaebfae51a",
   "dependencies": [
     "taglib"
   ]
