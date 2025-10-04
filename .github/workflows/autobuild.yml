@@ -7,61 +7,108 @@ on:
     branches: [ main, dev ]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        build_config: [Release]
+  # ----------------------------------------------------------------------
+  # 1. Linux (Ubuntu)
+  # ----------------------------------------------------------------------
+  job_linux:
+    name: Linux Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    runs-on: ${{ matrix.os }}
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libtag1-dev
 
+      - name: Configure CMake
+        run: |
+          cmake -B ${{github.workspace}}/build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -S ${{github.workspace}}
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config Release
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-linux
+          path: ${{github.workspace}}/build/ncmdump
+
+  # ----------------------------------------------------------------------
+  # 2. macOS Build
+  # ----------------------------------------------------------------------
+  job_macos:
+    name: macOS Build (Brew)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install Dependencies
+        run: |
+          brew install taglib
+
+      - name: Configure CMake
+        run: |
+          cmake -B ${{github.workspace}}/build \
+                -DCMAKE_BUILD_TYPE=Release \
+                -S ${{github.workspace}}
+
+      - name: 构建项目
+        run: cmake --build ${{github.workspace}}/build --config Release
+
+      - name: 上传 macOS 产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-macos
+          path: ${{github.workspace}}/build/ncmdump
+
+
+  # ----------------------------------------------------------------------
+  # 3. Windows Build
+  # ----------------------------------------------------------------------
+  job_windows:
+    name: Windows Build
+    runs-on: windows-latest
     env:
       VCPKG_TRIPLET: x64-windows-static
 
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-    - name: Install Dependencies - Ubuntu
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt update
-        sudo apt install -y build-essential cmake libtag1-dev
+      - name: Install Dependencies
+        uses: lukka/run-vcpkg@v11
+        id: Vcpkg
+        with:
+          vcpkgJsonGlob: '**/vcpkg.json'
+          vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
+          
+      - name: Configure CMake
+        run: |
+          $toolchainFile = "${{ steps.vcpkg.outputs.vcpkgToolchainFile }}"
+          
+          cmake -B ${{github.workspace}}/build `
+                -DCMAKE_TOOLCHAIN_FILE=$toolchainFile `
+                -DVCPKG_TARGET_TRIPLET={{VCPKG_TRIPLET}} `
+                -S ${{github.workspace}}
 
-    - name: Install Dependencies - macOS
-      if: runner.os == 'macOS'
-      run: |
-        brew install git cmake taglib
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config Release
 
-    - name: Install Dependencies - Windows
-      uses: lukka/run-vcpkg@v11 
-      with:
-        vcpkgJsonGlob: '**/vcpkg.json'
-        vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
-
-    # ----------------------------------------------------------------------
-    # CMake Configuration
-    # ----------------------------------------------------------------------
-
-    - name: Configure CMake
-      run: |
-        BUILD_DIR=${{ github.workspace }}/build
-        CMAKE_ARGS="-DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -S ${{ github.workspace }}"
-
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          CMAKE_TOOLCHAIN_FILE_PATH=$(echo ${{ steps.vcpkg.outputs.vcpkgToolchainFile }})
-          CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_PATH}"
-          cmake -B $BUILD_DIR $CMAKE_ARGS
-        else
-          cmake -B $BUILD_DIR $CMAKE_ARGS
-        fi
-      shell: bash
-
-    # ----------------------------------------------------------------------
-    # CMake Build
-    # ----------------------------------------------------------------------
-
-    - name: Build Targets
-      run: cmake --build ${{github.workspace}}/build --config ${{ matrix.build_config }}
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-windows
+          path: ${{github.workspace}}/build/ncmdump
