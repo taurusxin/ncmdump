@@ -11,7 +11,7 @@ find_path(Taglib_INCLUDE_DIR tag.h
   PATHS /usr/include /usr/local/include
 )
 
-find_library(Taglib_LIBRARY NAMES tag taglib
+find_library(Taglib_LIBRARY NAMES tag libtag
   PATHS /usr/lib /usr/local/lib /usr/lib/x86_64-linux-gnu
 )
 
