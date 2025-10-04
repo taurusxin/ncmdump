@@ -79,20 +79,18 @@ git clone https://github.com/taurusxin/ncmdump.git
 
 使用 CMake 配置项目。Windows 下若使用 GNU 套件，推荐使用 [msys2](https://www.msys2.org/) 或者 [winlibs](https://winlibs.com/)
 
-注意：从 1.6 版本开始，CMake 构建不再依赖于 gitsubmodule，因此无需再克隆 `taglib` 仓库，改为使用系统的 taglib 库，针对不同系统上的构建，请参照如下方法
+注意：从 1.6 版本开始，CMake 构建不再依赖于 gitmodule，因此无需再克隆 `taglib` 仓库，改为使用系统的 taglib 库，针对不同系统上的构建，请参照如下方法
 
 ### Windows
 
-Windows 下，你可以使用 vcpkg 来安装 taglib 库，或者手动下载 taglib 的源码，并使用 CMake 来构建 taglib 库
-
-vcpkg
+Windows 下，首先使用 vcpkg 来安装 taglib 库，或者手动下载 taglib 的源码，参照[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib-msvc)使用 CMake 来构建 taglib 库，当然还需要额外安装依赖。当然首选还是推荐使用 vcpkg 来管理依赖。
 
 ```shell
-# 安装 taglib 库
-vcpkg install taglib:x64-windows
+# 安装 taglib 的静态库
+vcpkg install taglib:x64-windows-static
 
-# 配置项目
-cmake -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\vcpkg.cmake -B build
+# 配置项目，替换 %VCPKG_ROOT% 为你的 vcpkg 安装路径
+cmake -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake -B build
 
 # 编译项目
 cmake --build build -j 8 --config Release

@@ -5,6 +5,7 @@ project(ncmdump LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(ZLIB)
 find_package(TagLib REQUIRED)
 
 if(MSVC)
@@ -33,6 +34,24 @@ if(WIN32)
     ${WIN_SOURCES}
   )
 
+  if(MSVC)
+    # 强制所有配置（Debug/Release 等）使用静态 C 运行时库
+    foreach(flag_var
+      CMAKE_CXX_FLAGS
+      CMAKE_C_FLAGS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_CXX_FLAGS_RELEASE
+    )
+      if(${flag_var})
+        string(REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+      endif()
+    endforeach()
+  endif()
+
+  target_include_directories(ncmdump_lib PRIVATE src/include)
+
+  target_compile_definitions(ncmdump_exec PRIVATE TAGLIB_STATIC)
+
   set_target_properties(ncmdump_lib PROPERTIES OUTPUT_NAME "libncmdump")
 
   target_link_libraries(ncmdump_lib TagLib::tag)
@@ -49,6 +68,7 @@ endif()
 set_target_properties(ncmdump_exec PROPERTIES OUTPUT_NAME "ncmdump")
 target_include_directories(ncmdump_exec PRIVATE src/include)
 
+# link to taglib
 target_link_libraries(ncmdump_exec TagLib::tag)
 
 include(GNUInstallDirs)

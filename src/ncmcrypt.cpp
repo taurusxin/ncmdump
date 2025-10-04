@@ -25,15 +25,16 @@ const unsigned char NeteaseCrypt::mPng[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A,
 
 static void aesEcbDecrypt(const unsigned char *key, std::string &src, std::string &dst)
 {
+    int i, n;
     unsigned char out[16];
 
-    const int n = src.length() >> 4;
+    n = src.length() >> 4;
 
     dst.clear();
 
     AES aes(key);
 
-    for (int i = 0; i < n - 1; i++)
+    for (i = 0; i < n - 1; i++)
     {
         aes.decrypt((unsigned char *)src.c_str() + (i << 4), out);
         dst += std::string((char *)out, 16);
