@@ -36,7 +36,7 @@ jobs:
         brew install git cmake taglib
 
     - name: Install Dependencies - Windows
-      uses: lukka/run-vcpkg@v12 
+      uses: lukka/run-vcpkg@v11 
       with:
         vcpkgJsonGlob: '**/vcpkg.json'
         vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
