@@ -77,24 +77,18 @@ ncmdump -d source_dir -o output_dir -r
 git clone https://github.com/taurusxin/ncmdump.git
 ```
 
-使用 CMake 配置项目。Windows 下若使用 GNU 套件，推荐使用 [msys2](https://www.msys2.org/) 或者 [winlibs](https://winlibs.com/)
-
-注意：从 1.6 版本开始，CMake 构建不再依赖于 gitmodule，因此无需再克隆 `taglib` 仓库，改为使用系统的 taglib 库，针对不同系统上的构建，请参照如下方法
-
 ### Windows
 
-首先需要安装 Visual Studio 2022 和 cmake，并安装 C++ 桌面开发环境，然后安装 [vcpkg](https://github.com/microsoft/vcpkg)
+安装 Visual Studio 2022 和 cmake，并安装 C++ 桌面开发环境，然后安装 [vcpkg](https://github.com/microsoft/vcpkg)
 
 ```shell
 # 安装 vcpkg 并安装 taglib 的静态库
 git clone https://github.com/microsoft/vcpkg.git
 cd vcpkg
 ./bootstrap-vcpkg.bat
-
-./vcpkg install taglib:x64-windows-static
 ```
 
-进入源码目录并配置项目
+配置项目
 
 ```shell
 # 使用 cmake 配置项目，替换 %VCPKG_ROOT% 为你的 vcpkg 安装路径
@@ -104,22 +98,46 @@ cmake -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/bui
 cmake --build build -j 8 --config Release
 ```
 
-### macOS / Linux
+### macOS
 
-macOS 下，你可以使用 Homebrew 来安装 taglib 库，Linux 下，你可以使用 apt / pacman 等包管理器来安装 taglib 库
+macOS 下，你可以方便地使用 Homebrew 来安装 taglib 库
 
 ```shell
 # 安装 taglib 库
-# macOS
 brew install taglib
-# Linux (Debian / Ubuntu)
-sudo apt install libtag1-dev
 
 # 配置项目
 cmake -DCMAKE_BUILD_TYPE=Release -B build
 
 # 编译项目
-cmake --build build -j 8
+cmake --build build -j$(nproc)
+```
+
+### Linux
+
+Linux 下，由于 Ubuntu 24.04 的 taglib 仍然为 1.x 版本，不支持 CMake，所以需要手动编译安装 2.x 版本，目前 GitHub Actions 的 Linux 构建流程也是手动编译。
+
+```shell
+# 拉取源码
+wget https://github.com/taglib/taglib/releases/download/v2.1.1/taglib-2.1.1.tar.gz
+
+# 解压并进入
+tar -xzf taglib-2.1.1.tar.gz && cd taglib-2.1.1
+
+# 配置、编译和安装
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release .
+make -j$(nproc)
+sudo make install
+```
+
+然后和 macOS 上一样，使用 CMake 配置项目并编译项目
+
+```shell
+# 配置项目
+cmake -DCMAKE_BUILD_TYPE=Release -B build
+
+# 编译项目
+cmake --build build -j$(nproc)
 ```
 
 ---
