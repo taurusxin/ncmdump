@@ -97,18 +97,22 @@ jobs:
           
       - name: Configure CMake
         run: |
-          $toolchainFile = "${{ steps.vcpkg.outputs.vcpkgToolchainFile }}"
-          
           cmake -B ${{github.workspace}}/build \
-                -DCMAKE_TOOLCHAIN_FILE=$toolchainFile \
+                -DCMAKE_TOOLCHAIN_FILE={{ steps.vcpkg.outputs.vcpkgToolchainFile }} \
                 -DVCPKG_TARGET_TRIPLET={{VCPKG_TRIPLET}} \
                 -S ${{github.workspace}}
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config Release
 
-      - name: Upload Windows Artifact
+      - name: Upload Windows Executable Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact-windows
-          path: ${{github.workspace}}/build/ncmdump
+          path: ${{github.workspace}}/build/ncmdump.exe
+
+      - name: Upload Windows Library Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-windows
+          path: ${{github.workspace}}/build/libncmdump.dll
