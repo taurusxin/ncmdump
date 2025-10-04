@@ -99,7 +99,7 @@ jobs:
         run: |
           cmake -B ${{github.workspace}}/build \
                 -DCMAKE_TOOLCHAIN_FILE=${{ steps.vcpkg.outputs.vcpkgToolchainFile }} \
-                -DVCPKG_TARGET_TRIPLET=${{VCPKG_TRIPLET}} \
+                -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_TRIPLET }} \
                 -S ${{github.workspace}}
 
       - name: Build
