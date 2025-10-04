@@ -23,7 +23,17 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake libtag1-dev
+          sudo apt-get install -y build-essential cmake libtag1-dev zlib1g-dev
+
+      # ubuntu 24.04 does not contains taglib v2.x, which does not support cmake, built it manually
+      - name: Build TagLib v2.1.1
+        run: |
+          wget https://github.com/taglib/taglib/releases/download/v2.1.1/taglib-2.1.1.tar.gz
+          tar -xzf taglib-2.1.1.tar.gz
+          cd taglib-2.1.1.tar.gz
+          cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release .
+          make -j$(nproc)
+          sudo make install
 
       - name: Configure CMake
         run: |
@@ -92,12 +102,11 @@ jobs:
         id: vcpkg
         with:
           vcpkgJsonGlob: '**/vcpkg.json'
-          vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
 
       - name: Configure CMake
         run: |
           cmake -B ${{github.workspace}}/build `
-                -DCMAKE_TOOLCHAIN_FILE=${{ steps.vcpkg.outputs.toolchain-file }} `
+                -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake `
                 -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_TRIPLET }} `
                 -S ${{github.workspace}}
 
