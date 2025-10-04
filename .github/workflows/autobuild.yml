@@ -7,37 +7,6 @@ on:
     branches: [ main ]
 
 jobs:
-  build_on_windows_msys2:
-    runs-on: windows-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Install dependencies
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: UCRT64
-        update: true
-        install: git mingw-w64-ucrt-x86_64-toolchain
-
-    - name: Configure build
-      run: cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
-
-    - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4
-    
-    - name: Strip
-      run: strip ${{ env.BUILD_PATH }}/ncmdump.exe
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows_amd64_build_msys2_exe
-        path: ${{ env.BUILD_PATH }}/ncmdump.exe
-
   build_on_windows_msvc:
     runs-on: windows-latest
 
