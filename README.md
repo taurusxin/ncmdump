@@ -83,20 +83,26 @@ git clone https://github.com/taurusxin/ncmdump.git
 
 ### Windows
 
-Windows 下，首先使用 vcpkg 来安装 taglib 库，或者手动下载 taglib 的源码，参照[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib-msvc)使用 CMake 来构建 taglib 库，当然还需要额外安装依赖。当然首选还是推荐使用 vcpkg 来管理依赖。
+首先需要安装 Visual Studio 2022 和 cmake，并安装 C++ 桌面开发环境，然后安装 [vcpkg](https://github.com/microsoft/vcpkg)
 
 ```shell
-# 安装 taglib 的静态库
-vcpkg install taglib:x64-windows-static
+# 安装 vcpkg 并安装 taglib 的静态库
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.bat
 
-# 配置项目，替换 %VCPKG_ROOT% 为你的 vcpkg 安装路径
-cmake -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake -B build
+./vcpkg install taglib:x64-windows-static
+```
+
+进入源码目录并配置项目
+
+```shell
+# 使用 cmake 配置项目，替换 %VCPKG_ROOT% 为你的 vcpkg 安装路径
+cmake -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -B build
 
 # 编译项目
 cmake --build build -j 8 --config Release
 ```
-
-手动编译 taglib 的方法参见[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib)，与 vcpkg 类似，使用 `cmake --install --prefix` 命令来指定安装 taglib 路径，最后在配置本项目时的 CMake 中指定 `CMAKE_PREFIX_PATH` 参数来指定 taglib 库的安装路径即可
 
 ### macOS / Linux
 
