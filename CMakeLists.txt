@@ -5,10 +5,8 @@ project(ncmdump LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Ubuntu 24 Does not contains taglib 2.x, only 1.x, find it manually.
-if(UNIX AND NOT APPLE)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-endif()
 
 find_package(ZLIB)
 find_package(TagLib REQUIRED)

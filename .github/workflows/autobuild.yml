@@ -72,7 +72,6 @@ jobs:
           name: build-artifact-macos
           path: ${{github.workspace}}/build/ncmdump
 
-
   # ----------------------------------------------------------------------
   # 3. Windows Build
   # ----------------------------------------------------------------------
@@ -90,16 +89,16 @@ jobs:
 
       - name: Install Dependencies
         uses: lukka/run-vcpkg@v11
-        id: Vcpkg
+        id: vcpkg
         with:
           vcpkgJsonGlob: '**/vcpkg.json'
           vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
-          
+
       - name: Configure CMake
         run: |
-          cmake -B ${{github.workspace}}/build
-                -DCMAKE_TOOLCHAIN_FILE=${{ steps.vcpkg.outputs.vcpkgToolchainFile }}
-                -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_TRIPLET }}
+          cmake -B ${{github.workspace}}/build `
+                -DCMAKE_TOOLCHAIN_FILE=${{ steps.vcpkg.outputs.vcpkgToolchainFile }} `
+                -DVCPKG_TARGET_TRIPLET=${{ env.VCPKG_TRIPLET }} `
                 -S ${{github.workspace}}
 
       - name: Build
