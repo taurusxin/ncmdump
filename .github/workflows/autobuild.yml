@@ -4,108 +4,64 @@ env:
   BUILD_PATH: build
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 jobs:
-  build_on_windows_msvc:
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        build_config: [Release]
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      VCPKG_TRIPLET: x64-windows-static
 
     steps:
-    - name: Checkout repository
+    - name: 检出代码
       uses: actions/checkout@v4
       with:
-        submodules: recursive
+        submodules: true
 
-    - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
-
-    - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4 --config ${{ env.BUILD_TYPE }}
-
-    - name: Upload artifact executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows_amd64_build_msvc_exe
-        path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/ncmdump.exe
-    
-    - name: Upload artifact DLL
-      uses: actions/upload-artifact@v4
-      with:
-        name: windows_amd64_build_msvc_dll
-        path: ${{ env.BUILD_PATH }}/${{ env.BUILD_TYPE }}/libncmdump.dll
-  
-  build_on_linux_amd64:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Install dependencies
+    - name: Install Dependencies - Ubuntu
+      if: runner.os == 'Linux'
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        sudo apt update
+        sudo apt install -y build-essential cmake libtag1-dev
 
-    - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }}
-
-    - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux_build_amd64
-        path: ${{ env.BUILD_PATH }}/ncmdump
-
-  build_on_macos_amd64:
-    runs-on: macos-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Install dependencies
+    - name: Install Dependencies - macOS
+      if: runner.os == 'macOS'
       run: |
-        brew install git cmake
+        brew install git cmake taglib
 
-    - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }} -DCMAKE_OSX_ARCHITECTURES=x86_64
-
-    - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    - name: Install Dependencies - Windows
+      uses: lukka/run-vcpkg@v12 
       with:
-        name: macOS_build_amd64
-        path: ${{ env.BUILD_PATH }}/ncmdump
+        vcpkgJsonGlob: '**/vcpkg.json'
+        vcpkgTriplet: ${{ env.VCPKG_TRIPLET }}
 
-  build_on_macos_arm64:
-    runs-on: macos-latest
+    # ----------------------------------------------------------------------
+    # CMake Configuration
+    # ----------------------------------------------------------------------
 
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Install dependencies
+    - name: Configure CMake
       run: |
-        brew install git cmake
+        BUILD_DIR=${{ github.workspace }}/build
+        CMAKE_ARGS="-DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -S ${{ github.workspace }}"
 
-    - name: Configure build
-      run: cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -B ${{ env.BUILD_PATH }} -DCMAKE_OSX_ARCHITECTURES=arm64
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          CMAKE_TOOLCHAIN_FILE_PATH=$(echo ${{ steps.vcpkg.outputs.vcpkgToolchainFile }})
+          CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE_PATH}"
+          cmake -B $BUILD_DIR $CMAKE_ARGS
+        else
+          cmake -B $BUILD_DIR $CMAKE_ARGS
+        fi
+      shell: bash
 
-    - name: Build
-      run: cmake --build ${{ env.BUILD_PATH }} -j 4
+    # ----------------------------------------------------------------------
+    # CMake Build
+    # ----------------------------------------------------------------------
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: macOS_build_arm64
-        path: ${{ env.BUILD_PATH }}/ncmdump
+    - name: Build Targets
+      run: cmake --build ${{github.workspace}}/build --config ${{ matrix.build_config }}
