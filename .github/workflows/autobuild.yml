@@ -8,7 +8,7 @@ on:
 
 jobs:
   # ----------------------------------------------------------------------
-  # 1. Linux (Ubuntu)
+  # 1. Linux Build
   # ----------------------------------------------------------------------
   job_linux:
     name: Linux Build
@@ -44,7 +44,7 @@ jobs:
   # 2. macOS Build
   # ----------------------------------------------------------------------
   job_macos:
-    name: macOS Build (Brew)
+    name: macOS Build
     runs-on: macos-latest
 
     steps:
@@ -63,10 +63,10 @@ jobs:
                 -DCMAKE_BUILD_TYPE=Release \
                 -S ${{github.workspace}}
 
-      - name: 构建项目
+      - name: Build
         run: cmake --build ${{github.workspace}}/build --config Release
 
-      - name: 上传 macOS 产物
+      - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact-macos
@@ -99,9 +99,9 @@ jobs:
         run: |
           $toolchainFile = "${{ steps.vcpkg.outputs.vcpkgToolchainFile }}"
           
-          cmake -B ${{github.workspace}}/build `
-                -DCMAKE_TOOLCHAIN_FILE=$toolchainFile `
-                -DVCPKG_TARGET_TRIPLET={{VCPKG_TRIPLET}} `
+          cmake -B ${{github.workspace}}/build \
+                -DCMAKE_TOOLCHAIN_FILE=$toolchainFile \
+                -DVCPKG_TARGET_TRIPLET={{VCPKG_TRIPLET}} \
                 -S ${{github.workspace}}
 
       - name: Build
