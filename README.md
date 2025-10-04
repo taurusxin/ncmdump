@@ -98,7 +98,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=%VCPKG_ROOT%\scripts\vcpkg.cmake -B build
 cmake --build build -j 8 --config Release
 ```
 
-手动编译 taglib 的方法参见[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib)，与 vcpkg 类似，只是需要指定 `--prefix` 参数来指定安装路径，然后使用 `cmake --install` 命令来安装 taglib 库，最后在 CMake 中指定 `CMAKE_PREFIX_PATH` 参数来指定 taglib 库的安装路径即可
+手动编译 taglib 的方法参见[官方文档](https://github.com/taglib/taglib/blob/master/INSTALL.md#building-taglib)，与 vcpkg 类似，使用 `cmake --install --prefix` 命令来指定安装 taglib 路径，最后在配置本项目时的 CMake 中指定 `CMAKE_PREFIX_PATH` 参数来指定 taglib 库的安装路径即可
 
 ### macOS / Linux
 
