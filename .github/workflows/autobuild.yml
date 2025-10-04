@@ -30,7 +30,7 @@ jobs:
         run: |
           wget https://github.com/taglib/taglib/releases/download/v2.1.1/taglib-2.1.1.tar.gz
           tar -xzf taglib-2.1.1.tar.gz
-          cd taglib-2.1.1.tar.gz
+          cd taglib-2.1.1
           cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release .
           make -j$(nproc)
           sudo make install
