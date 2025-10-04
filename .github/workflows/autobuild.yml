@@ -47,7 +47,7 @@ jobs:
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact-linux
+          name: ncmdump-linux
           path: ${{github.workspace}}/build/ncmdump
 
   # ----------------------------------------------------------------------
@@ -79,7 +79,7 @@ jobs:
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact-macos
+          name: ncmdump-macos
           path: ${{github.workspace}}/build/ncmdump
 
   # ----------------------------------------------------------------------
@@ -116,11 +116,11 @@ jobs:
       - name: Upload Windows Executable Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact-windows
-          path: ${{github.workspace}}/build/ncmdump.exe
+          name: ncmdump-windows
+          path: ${{github.workspace}}/build/Release/ncmdump.exe
 
       - name: Upload Windows Library Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact-windows
-          path: ${{github.workspace}}/build/libncmdump.dll
+          name: libncmdump-windows
+          path: ${{github.workspace}}/build/Release/libncmdump.dll
