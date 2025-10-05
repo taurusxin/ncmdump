@@ -15,7 +15,7 @@
 
 namespace fs = std::filesystem;
 
-void processFile(const fs::path &filePath, const fs::path &outputFolder)
+void processFile(const fs::path &filePath, const fs::path &outputFolder, bool isRequiredRemoved)
 {
     if (fs::exists(filePath) == false)
     {
@@ -35,7 +35,14 @@ void processFile(const fs::path &filePath, const fs::path &outputFolder)
         crypt.Dump(outputFolder.u8string());
         crypt.FixMetadata();
 
-        std::cout << BOLDGREEN << "[Done] " << RESET << "'" << filePath.u8string() << "' -> '" << crypt.dumpFilepath().u8string() << "'" << std::endl;
+        std::cout << BOLDGREEN << "[Done] " << RESET << "'" << filePath.u8string() << "' -> '" << crypt.dumpFilepath().u8string() << "'" ;
+        
+        if (isRequiredRemoved)
+        {
+            fs::remove(filePath);
+            std::cout << " with removed as required.";
+        }
+        std::cout << std::endl;
     }
     catch (const std::invalid_argument &e)
     {
@@ -61,6 +68,7 @@ int main(int argc, char **argv)
     ("r,recursive", "Process files recursively (requires -d option)", cxxopts::value<bool>()->default_value("false"))
     ("o,output", "Output folder (default: original file folder)", cxxopts::value<std::string>())
     ("v,version", "Print version information", cxxopts::value<bool>()->default_value("false"))
+    ("m,remove", "Remove original file if done", cxxopts::value<bool>()->default_value("false"))
     ("filenames", "Input files", cxxopts::value<std::vector<std::string>>());
 
     options.positional_help("<files>");
@@ -165,7 +173,7 @@ int main(int argc, char **argv)
                     fs::create_directories(destinationPath.parent_path());
 
                     // 处理文件
-                    processFile(path, destinationPath.parent_path());
+                    processFile(path, destinationPath.parent_path(), result.count("remove"));
                 }
             }
         }
@@ -178,11 +186,11 @@ int main(int argc, char **argv)
                 {
                     if (outputDirSpecified)
                     {
-                        processFile(path, outputDir);
+                        processFile(path, outputDir, result.count("remove"));
                     }
                     else
                     {
-                        processFile(path, "");
+                        processFile(path, "", result.count("remove"));
                     }
                 }
             }
@@ -204,11 +212,11 @@ int main(int argc, char **argv)
 
             if (outputDirSpecified)
             {
-                processFile(filePathU8, outputDir);
+                processFile(filePathU8, outputDir, result.count("remove"));
             }
             else
             {
-                processFile(filePathU8, "");
+                processFile(filePathU8, "", result.count("remove"));
             }
         }
     }
