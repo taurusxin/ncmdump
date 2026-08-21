@@ -127,6 +127,28 @@ typedef struct internal_hooks
 #if defined(_MSC_VER)
 /* work around MSVC error C2322: '...' address of dillimport '...' is not static */
 static void *internal_malloc(size_t size)
+static void cjson_get_object_item_should_not_crash_with_array(void) {
+    cJSON *array = NULL;
+    cJSON *found = NULL;
+    array = cJSON_Parse("[1]");
+
+    found = cJSON_GetObjectItem(array, "name");
+    TEST_ASSERT_NULL(found);
+
+    cJSON_Delete(array);
+}
+
+static void cjson_get_object_item_case_sensitive_should_not_crash_with_array(void) {
+    cJSON *array = NULL;
+    cJSON *found = NULL;
+    array = cJSON_Parse("[1]");
+
+    found = cJSON_GetObjectItemCaseSensitive(array, "name");
+    TEST_ASSERT_NULL(found);
+
+    cJSON_Delete(array);
+}
+
 {
     return malloc(size);
 }
@@ -535,6 +557,8 @@ static cJSON_bool print_number(const cJSON * const item, printbuffer * const out
 
     return true;
 }
+    RUN_TEST(cjson_get_object_item_should_not_crash_with_array);
+    RUN_TEST(cjson_get_object_item_case_sensitive_should_not_crash_with_array);
 
 /* parse 4 digit hexadecimal number */
 static unsigned parse_hex4(const unsigned char * const input)
@@ -1781,7 +1805,7 @@ static cJSON *get_object_item(const cJSON * const object, const char * const nam
     current_element = object->child;
     if (case_sensitive)
     {
-        while ((current_element != NULL) && (strcmp(name, current_element->string) != 0))
+        while ((current_element != NULL) && (current_element->string != NULL) && (strcmp(name, current_element->string) != 0))
         {
             current_element = current_element->next;
         }
@@ -1792,6 +1816,10 @@ static cJSON *get_object_item(const cJSON * const object, const char * const nam
         {
             current_element = current_element->next;
         }
+    }
+
+    if ((current_element == NULL) || (current_element->string == NULL)) {
+        return NULL;
     }
 
     return current_element;
